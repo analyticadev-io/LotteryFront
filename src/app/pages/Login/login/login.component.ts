@@ -22,12 +22,11 @@ export class LoginComponent {
   private AccesoService = inject(AccesoService);
   private router = inject(Router);
   private formBuild = inject(FormBuilder);
-  public titleLogin: string = language.title_login;
   public language: any=language;
 
 
   public formLogin: FormGroup = this.formBuild.group({
-    NombreUsuario: ['', Validators.required,Validators.email],
+    NombreUsuario: ['', Validators.required],
     contrasena: ['', Validators.required],
   });
 
