@@ -68,7 +68,7 @@ export class RegistroComponent {
       email: this.formRegister.value.email,
       contrasena: this.formRegister.value.contrasena,
       nombreUsuario: this.formRegister.value.nombreUsuario,
-      fechaRegistro: this.date,
+      fechaRegistro: this.date
     };
     this.AccesoService.Registro(object).subscribe({
       next: (data) => {
