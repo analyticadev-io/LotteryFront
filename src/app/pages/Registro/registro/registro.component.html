@@ -1,1 +1,47 @@
-<p>registro works!</p>
+<div class="card-container">
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> {{language.title_login}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <form class="from-custom" [formGroup]="formRegister">
+        <br>
+        <mat-form-field class="input-custom">
+          <mat-label>{{language.register_fullname_input_form}}</mat-label>
+          <input type="text" matInput placeholder="{{language.register_fullname_placegolder_input_form}}" formControlName="nombre">
+          <mat-error *ngIf="formRegister.get('nombre')?.invalid">{{ language.fullname_required }}</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="input-custom">
+          <mat-label>{{language.register_email_input_form}}</mat-label>
+          <input type="text" matInput placeholder="{{language.register_email_placegolder_input_form}}" formControlName="email">
+          <mat-error *ngIf="formRegister.get('email')?.invalid">{{ language.email_required }}</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="input-custom">
+          <mat-label>{{language.login_password_imput_form}}</mat-label>
+          <input type="password" matInput placeholder="{{language.login_password_placeholder_imput_form}}" formControlName="contrasena">
+          <mat-error *ngIf="formRegister.get('contrasena')?.invalid">{{ language.password_required }}</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="input-custom">
+          <mat-label>{{language.login_name_imput_form}}</mat-label>
+          <input matInput placeholder="{{language.login_name_placeholder_imput_form}}" formControlName="nombreUsuario">
+          <mat-error *ngIf="formRegister.get('nombreUsuario')?.invalid">{{ language.name_required }}</mat-error>
+        </mat-form-field>
+        <br>
+
+        <div class="flex" >
+          <button color="primary" mat-flat-button (click)="Inicio()" >{{language.button_login}}</button>
+          <button color="warn" mat-flat-button style="margin-left: 5px;" (click)="Registro()" >{{language.button_action_sign_up}}</button>
+        </div>
+
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>
