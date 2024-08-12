@@ -46,6 +46,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { HomeComponent } from './pages/Home/home/home.component';
 import { LoginComponent } from './pages/Login/login/login.component';
 import { RegistroComponent } from './pages/Registro/registro/registro.component';
+import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
 
 
 registerLocaleData(en);
@@ -74,7 +75,8 @@ registerLocaleData(en);
     //componentes
     HomeComponent,
     LoginComponent,
-    RegistroComponent
+    RegistroComponent,
+    DrawerComponent
 
   ],
   providers: [
