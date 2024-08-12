@@ -12,21 +12,34 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import {CookieService} from 'ngx-cookie-service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatCardModule,MatFormFieldModule,MatInputModule,MatButtonModule,ReactiveFormsModule
+  imports: [MatCardModule,MatFormFieldModule,MatInputModule,
+    MatButtonModule,ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+
+  /**
+   *
+   */
+  constructor(private cookieService: CookieService) {
+
+
+  }
+
   private AccesoService = inject(AccesoService);
   private router = inject(Router);
   private formBuild = inject(FormBuilder);
   public language: any=language;
   private _snackBar = inject(MatSnackBar);
+  private encryptionKey:string = appsettings.cryptoJs_secure_MD5_crypted_key;
 
   public formLogin: FormGroup = this.formBuild.group({
     NombreUsuario: ['', Validators.required],
@@ -43,7 +56,14 @@ export class LoginComponent {
       next:(data)=>{
         if(data.isSuccess){
           const token = data.token.token;
-          localStorage.setItem("token",token);
+          const userInfo = data.token.usuario;
+
+          const ciphertoken = CryptoJS.AES.encrypt(JSON.stringify(token), this.encryptionKey).toString();
+          const cipherUser = CryptoJS.AES.encrypt(JSON.stringify(userInfo), this.encryptionKey).toString();
+
+          this.cookieService.set('authToken', ciphertoken, { secure: true });
+          this.cookieService.set('userinfo', cipherUser, { secure: true });
+
           this.router.navigate(['home'])
         }else{
           this.openSnackBar(this.language.alert_invalid_login);
