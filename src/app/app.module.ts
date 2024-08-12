@@ -48,6 +48,15 @@ import { LoginComponent } from './pages/Login/login/login.component';
 import { RegistroComponent } from './pages/Registro/registro/registro.component';
 import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
 
+//NGX cookie service
+import {CookieService} from 'ngx-cookie-service';
+
+//CryptoJS
+import * as CryptoJS from 'crypto-js';
+
+//jwt_decode
+import jwt_decode from 'jwt-decode';
+
 
 registerLocaleData(en);
 
@@ -76,14 +85,20 @@ registerLocaleData(en);
     HomeComponent,
     LoginComponent,
     RegistroComponent,
-    DrawerComponent
+    DrawerComponent,
+
+    //
 
   ],
   providers: [
     provideAnimationsAsync(),
     { provide: NZ_I18N, useValue: en_US },
-    provideHttpClient()
+    provideHttpClient(),
+    CookieService,
+
   ],
   //bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+ }
