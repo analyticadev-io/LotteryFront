@@ -1,25 +1,17 @@
 import { Component } from '@angular/core';
 
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { DrawerComponent } from '../../../components/Drawer/drawer/drawer.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NzDrawerModule,NzButtonModule,NzLayoutModule],
+  imports: [NzLayoutModule,DrawerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
 
-  visible = false;
 
-  open(): void {
-    this.visible = true;
-  }
 
-  close(): void {
-    this.visible = false;
-  }
 }
