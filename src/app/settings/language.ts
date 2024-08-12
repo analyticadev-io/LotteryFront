@@ -34,6 +34,9 @@ export const language = {
   button_action_sign_up: 'Registrarse',
   button_action_close: 'Cerrar',
 
+  //Opciones del Menu
+  menu_options_Title:"Modulos",
+  menu_option_Roles:"roles",
 
 
   //---------------------
