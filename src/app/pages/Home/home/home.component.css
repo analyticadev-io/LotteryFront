@@ -2,7 +2,9 @@
   text-align: center;
 }
 
-nz-header,
+nz-header
+
+
 nz-footer {
   background: #7dbcea;
   color: #fff;
@@ -33,3 +35,6 @@ nz-layout nz-layout,
 nz-layout:last-child {
   margin: 0;
 }
+
+
+
