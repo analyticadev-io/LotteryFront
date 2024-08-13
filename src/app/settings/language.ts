@@ -34,9 +34,23 @@ export const language = {
   button_action_sign_up: 'Registrarse',
   button_action_close: 'Cerrar',
 
-  //Opciones del Menu
-  menu_options_Title:"Modulos",
-  menu_option_Roles:"roles",
+  //NavBar
+  hello_message: 'Hola,',
+  logout: 'Cerrar sesion',
+
+
+  //Titulo del Menu
+  menu_Title:"Modulos",
+  //Opciones del menu
+  /**
+   * Estas variables seran usadas para crear dinamicamente el menu de opciones
+   * - se debe agregar la variable menu_option_display_name_Roles (El nombre del modulo que deseamos crear)
+   * - se debe agregar la variable menu_option_module_name_Roles (el nombre de la variable que nos permitira
+   * identificar el modulo, este debe ser un slug del modulo, resumido lo mejor posible)
+   * y el valor sera el nombre del modulo
+   */
+  menu_option_display_name_Roles:"Roles",
+  menu_option_module_name_Roles:"roles",
 
 
   //---------------------
