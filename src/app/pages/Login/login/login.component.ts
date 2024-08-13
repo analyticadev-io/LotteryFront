@@ -55,12 +55,13 @@ export class LoginComponent {
     this.AccesoService.Login(obj).subscribe({
       next:(data)=>{
         if(data.isSuccess){
+
           const token = data.token.token;
+          //console.log('token original',token);
           const userInfo = data.token.usuario;
-
-          const ciphertoken = CryptoJS.AES.encrypt(JSON.stringify(token), this.encryptionKey).toString();
+          const ciphertoken = CryptoJS.AES.encrypt(token, this.encryptionKey).toString();
+          //console.log('token encriptado en el login',ciphertoken);
           const cipherUser = CryptoJS.AES.encrypt(JSON.stringify(userInfo), this.encryptionKey).toString();
-
           this.cookieService.set('authToken', ciphertoken, { secure: true });
           this.cookieService.set('userinfo', cipherUser, { secure: true });
 
