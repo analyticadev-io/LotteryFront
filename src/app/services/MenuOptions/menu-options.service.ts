@@ -9,7 +9,11 @@ import { language } from '../../settings/language';
 export class MenuOptionsService {
 
   private menuItemsSource = new BehaviorSubject<MenuOptions[]>([
-    { name: language.menu_option_Roles, visibilityStatus: false, icon:"lock" }
+    { name: language.menu_option_display_name_Roles,
+      module_name: language.menu_option_module_name_Roles,
+      visibilityStatus: false,
+      icon:"lock"
+    }
   ]);
 
   constructor() { }
@@ -20,14 +24,15 @@ export class MenuOptionsService {
   activeComponent$ = this.activeComponentSource.asObservable();
 
   toggleVisibility(itemName: string): void {
+
     const updatedMenuItems = this.menuItemsSource.value.map(item => {
-      item.visibilityStatus = (item.name === itemName) ? !item.visibilityStatus : false;
+      item.visibilityStatus = (item.module_name === itemName) ? !item.visibilityStatus : false;
       return item;
     });
     this.menuItemsSource.next(updatedMenuItems);
 
     const activeItem = updatedMenuItems.find(item => item.visibilityStatus);
-    this.activeComponentSource.next(activeItem ? activeItem.name : '');
+    this.activeComponentSource.next(activeItem ? activeItem.module_name : '');
   }
 
 }
