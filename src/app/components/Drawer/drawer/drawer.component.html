@@ -8,13 +8,14 @@
   [nzClosable]="false"
   [nzVisible]="visible"
   nzPlacement="right"
-  nzTitle="{{language.menu_options_Title}}"
+  nzTitle="{{language.menu_Title}}"
   (nzOnClose)="close()"
 >
   <ng-container *nzDrawerContent>
 
     <div>
-      <div  *ngFor="let item of menuItems$ | async" (click)="toggleVisibility(item.name)" style="margin: 5% 5% 5% 5%; background-color: whitesmoke;">
+      <div  *ngFor="let item of menuItems$ | async" (click)="toggleVisibility(item.module_name)" style="margin: 5% 5% 5% 5%; background-color: whitesmoke;">
+
         <div style="display: flex; flex-direction: row;" >
             <button nz-button nzType="primary" (click)="optionSelected(item)">
               <span nz-icon nzType="{{item.icon}}"></span>
@@ -23,9 +24,7 @@
         </div>
 
       </div>
-      
     </div>
-
 
   </ng-container>
 </nz-drawer>

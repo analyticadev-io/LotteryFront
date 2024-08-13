@@ -39,6 +39,7 @@ export class DrawerComponent {
   }
 
 toggleVisibility(itemName: string): void {
+    //console.log(itemName);
     this.menuService.toggleVisibility(itemName);
   }
 
