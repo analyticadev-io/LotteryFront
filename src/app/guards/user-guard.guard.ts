@@ -1,36 +1,3 @@
-// import { routes } from './../app.routes';
-// import { inject } from '@angular/core';
-// import { CanActivateFn, Router } from '@angular/router';
-// import { CookieService } from 'ngx-cookie-service';
-// import { appsettings } from '../settings/appsettings';
-// import * as CryptoJS from 'crypto-js';
-
-// export const userGuardGuard: CanActivateFn = (route, state) => {
-
-//   const cookieService = inject(CookieService);
-//   const router = inject(Router);
-//   const encryptionKey = appsettings.cryptoJs_secure_MD5_crypted_key;
-
-//   const token = cookieService.get('authToken');
-
-//   if (token) {
-//     // Aquí podrías agregar lógica adicional para verificar la validez del token
-//     // Por ejemplo, decodificar el token y verificar su fecha de expiración
-
-//     const decryptedToken = JSON.parse(CryptoJS.AES.decrypt(token, encryptionKey).toString(CryptoJS.enc.Utf8));
-//     console.log(decryptedToken);
-//     //const decryptedUserInfo = JSON.parse(CryptoJS.AES.decrypt(encryptedUserInfo, encryptionKey).toString(CryptoJS.enc.Utf8));
-
-//     return true; // Permite el acceso a la ruta
-//   } else {
-//     router.navigate(['']);
-//     return false; // Bloquea el acceso a la ruta
-//   }
-
-// };
-
-
-
 import { CanActivateFn, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { inject } from '@angular/core';
@@ -47,7 +14,7 @@ export const userGuardGuard: CanActivateFn = (route, state) => {
 
 
 
-  const encryptionKey = appsettings.cryptoJs_secure_MD5_crypted_key; // Usa tu clave de cifrado aquí
+  const encryptionKey = appsettings.cryptoJs_secure_MD5_crypted_key;
 
   const token = cookieService.get('authToken');
 
