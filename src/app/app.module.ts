@@ -20,6 +20,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
 
 
+
 //ReactiveForms
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
@@ -40,6 +41,7 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
 
 //Components
@@ -47,6 +49,7 @@ import { HomeComponent } from './pages/Home/home/home.component';
 import { LoginComponent } from './pages/Login/login/login.component';
 import { RegistroComponent } from './pages/Registro/registro/registro.component';
 import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
+import { RolesComponent } from './pages/Roles/roles/roles.component';
 
 //NGX cookie service
 import {CookieService} from 'ngx-cookie-service';
@@ -57,13 +60,16 @@ import * as CryptoJS from 'crypto-js';
 //jwt_decode
 import jwt_decode from 'jwt-decode';
 
+//
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { jwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interceptor';
 
 registerLocaleData(en);
 
 
 @NgModule({
   declarations: [
-    //AppComponent,
+
 
   ],
   imports: [
@@ -79,15 +85,16 @@ registerLocaleData(en);
 
 
     //NGZORRO
-    NzDrawerModule,NzIconModule,NzButtonModule,
+    NzDrawerModule,NzIconModule,NzButtonModule,NzGridModule,
 
     //componentes
     HomeComponent,
     LoginComponent,
     RegistroComponent,
     DrawerComponent,
-
+    RolesComponent,
     //
+    //AppComponent
 
   ],
   providers: [
@@ -95,7 +102,7 @@ registerLocaleData(en);
     { provide: NZ_I18N, useValue: en_US },
     provideHttpClient(),
     CookieService,
-
+    { provide: HTTP_INTERCEPTORS, useClass: jwtInterceptorInterceptor, multi: true },
   ],
   //bootstrap: [AppComponent]
 })
