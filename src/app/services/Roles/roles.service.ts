@@ -15,9 +15,10 @@ export class RolesService {
   private http = inject(HttpClient)
   private baseUrl:string = appsettings.apiBaseUrl
 
-  GetRoles(): Observable<Rol>{
-    return this.http.get<Rol>(`${this.baseUrl}Roles`)
+  GetRoles(): Observable<Rol[]> {
+    return this.http.get<Rol[]>(`${this.baseUrl}Roles`);
   }
+
 
   GetRol(id:number): Observable<Rol>{
     return this.http.get<Rol>(`${this.baseUrl}Roles/${id}`)
