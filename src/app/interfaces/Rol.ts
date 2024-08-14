@@ -3,6 +3,6 @@ import { Usuario } from './Usuario';
 export interface Rol {
   rolId?:number,
   nombre:string,
-  permisos?:Permiso,
-  usuarios?:Usuario
+  permisos?:Permiso[],
+  usuarios?:Usuario[]
 }
