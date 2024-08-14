@@ -1,6 +1,5 @@
  <nz-layout>
   <nz-header>
-
     <div nz-row>
       <div nz-col nzSpan="6">
         <app-drawer></app-drawer>
@@ -8,20 +7,27 @@
       <div nz-col nzSpan="6">
         <h3 style="color: white;">{{language.hello_message}} {{currentUser.nombre}}</h3>
       </div>
-      <div nz-col nzSpan="6"><p>hola</p></div>
-      <div nz-col nzSpan="6"><p>hola</p></div>
+      <div nz-col nzSpan="6">
+        <!-- Replace with actual content or remove -->
+        <p>Placeholder Content</p>
+      </div>
+      <div nz-col nzSpan="6">
+        <!-- Replace with actual content or remove -->
+        <p>Placeholder Content</p>
+      </div>
     </div>
-
-
   </nz-header>
   <nz-content>
-    <div *ngIf="activeComponent$ | async as activeComponent">
-      <app-roles
-        *ngIf="activeComponent === language.menu_option_module_name_Roles"
-      ></app-roles>
-    </div>
+
+      <div *ngIf="activeComponent$ | async as activeComponent">
+        <app-roles
+          *ngIf="activeComponent === language.menu_option_module_name_Roles"
+        ></app-roles>
+      </div>
+
   </nz-content>
-  <nz-footer>Footer</nz-footer>
+  <nz-footer>
+    <!-- Customize footer content -->
+    Footer
+  </nz-footer>
 </nz-layout>
-
-

@@ -7,11 +7,9 @@ import { RolesComponent } from "../../Roles/roles/roles.component";
 import { MenuOptionsService } from '../../../services/MenuOptions/menu-options.service';
 import { appsettings } from '../../../settings/appsettings';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-
 import {CookieService} from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
 import { Usuario } from '../../../interfaces/Usuario';
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -22,17 +20,11 @@ import { Usuario } from '../../../interfaces/Usuario';
 export class HomeComponent {
 
   activeComponent$ = this.menuService.activeComponent$;
-
   public language = language;
-
   public encryptionKey = appsettings.cryptoJs_secure_MD5_crypted_key;
-
   encryptedToken = this.cookieService.get('userinfo');
-
   public currentUser: Usuario = {} as Usuario;
-
   constructor(private menuService: MenuOptionsService,private cookieService: CookieService) {
-
 
   }
 
@@ -51,6 +43,5 @@ export class HomeComponent {
 
     }
   }
-
 
 }
