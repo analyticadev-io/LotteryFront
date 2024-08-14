@@ -7,5 +7,5 @@ export interface Usuario{
   contrasena:string,
   nombreUsuario:string,
   fechaRegistro:string,
-  rols?:Rol
+  rol?:Rol[]
 }
