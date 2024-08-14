@@ -51,7 +51,7 @@ export class RolesComponent implements AfterViewInit {
     //console.log('Loading roles...');
     this.rolesService.GetRoles().subscribe(
       (roles: Rol[]) => {
-        console.log('Roles loaded:', roles);
+        //console.log('Roles loaded:', roles);
         this.dataSource.data = roles;
       },
       error => {
