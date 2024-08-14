@@ -8,6 +8,18 @@ import { language } from '../../settings/language';
 })
 export class MenuOptionsService {
 
+
+  /**
+   * Las opciens que controlaran dinamicamente las opciones del menu
+   *
+   * { name: language.menu_option_display_name_Roles, //nombre delacrado en ela rchivo de lenguaje
+      module_name: language.menu_option_module_name_Roles, //identificador delacrado en ela rchivo de lenguaje
+      visibilityStatus: false,  //inicializado en false apra no mostrar nada por defecto
+      icon:"lock" //icono, se usa ngzorro icons
+    }
+   *
+   */
+
   private menuItemsSource = new BehaviorSubject<MenuOptions[]>([
     { name: language.menu_option_display_name_Roles,
       module_name: language.menu_option_module_name_Roles,
