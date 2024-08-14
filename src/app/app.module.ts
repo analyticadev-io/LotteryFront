@@ -60,9 +60,12 @@ import * as CryptoJS from 'crypto-js';
 //jwt_decode
 import jwt_decode from 'jwt-decode';
 
-//
+//Interceptors
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { jwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interceptor';
+
+//Directives
+import { askForPermission } from './Directives/ask-for-permissions.directive';
 
 registerLocaleData(en);
 
@@ -94,7 +97,7 @@ registerLocaleData(en);
     DrawerComponent,
     RolesComponent,
     //
-    //AppComponent
+    askForPermission
 
   ],
   providers: [
@@ -102,7 +105,6 @@ registerLocaleData(en);
     { provide: NZ_I18N, useValue: en_US },
     provideHttpClient(),
     CookieService,
-    { provide: HTTP_INTERCEPTORS, useClass: jwtInterceptorInterceptor, multi: true },
   ],
   //bootstrap: [AppComponent]
 })
