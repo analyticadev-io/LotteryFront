@@ -18,6 +18,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+
 
 
 
@@ -42,6 +44,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 
 //Components
@@ -50,6 +54,7 @@ import { LoginComponent } from './pages/Login/login/login.component';
 import { RegistroComponent } from './pages/Registro/registro/registro.component';
 import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
 import { RolesComponent } from './pages/Roles/roles/roles.component';
+
 
 //NGX cookie service
 import {CookieService} from 'ngx-cookie-service';
@@ -67,6 +72,7 @@ import { jwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interc
 //Directives
 import { askForPermission } from './Directives/ask-for-permissions.directive';
 
+
 registerLocaleData(en);
 
 
@@ -81,14 +87,14 @@ registerLocaleData(en);
     MatButtonModule,MatPaginatorModule,MatTableModule,ReactiveFormsModule,
     MatInputModule,MatSelectModule,MatDatepickerModule,NativeDateModule,
     MatSnackBarModule,MatIconModule,MatDialogModule,MatGridListModule,FormsModule,
-    MatCardModule,NzLayoutModule,
+    MatCardModule,NzLayoutModule,MatDividerModule,
 
     //Http
     HttpClientModule,
 
 
     //NGZORRO
-    NzDrawerModule,NzIconModule,NzButtonModule,NzGridModule,
+    NzDrawerModule,NzIconModule,NzButtonModule,NzGridModule,NzModalModule,
 
     //componentes
     HomeComponent,
@@ -96,8 +102,10 @@ registerLocaleData(en);
     RegistroComponent,
     DrawerComponent,
     RolesComponent,
-    //
-    askForPermission
+    //ModalComponent,
+    //Directives
+    askForPermission,
+
 
   ],
   providers: [
@@ -105,7 +113,11 @@ registerLocaleData(en);
     { provide: NZ_I18N, useValue: en_US },
     provideHttpClient(),
     CookieService,
+    NzMessageService
   ],
+  exports:[
+
+  ]
   //bootstrap: [AppComponent]
 })
 export class AppModule {
