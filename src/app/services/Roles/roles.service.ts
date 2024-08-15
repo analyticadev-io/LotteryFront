@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { appsettings } from '../../settings/appsettings';
 import { Rol } from '../../interfaces/Rol';
 import { UsuarioRol } from '../../interfaces/UsuarioRol';
+import { ResponseRolPermiso } from '../../interfaces/ResponseRolPermiso';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +29,12 @@ export class RolesService {
     return this.http.post<Rol>(`${this.baseUrl}Roles`,obj)
   }
 
-  UpdateRol(obj:Rol, id:number): Observable<Rol>{
-    return this.http.put<Rol>(`${this.baseUrl}Roles/${id}`,obj)
+  UpdateRol(obj:Rol): Observable<Rol>{
+    return this.http.put<Rol>(`${this.baseUrl}Roles`,obj)
   }
 
-  DeleteRol(id: number) {
-    return this.http.delete<void>(`${this.baseUrl}Roles/${id}`);
+  DeleteRol(rolId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}Roles/${rolId}`);
   }
 
   AsignRol(obj:UsuarioRol): Observable<string>{
