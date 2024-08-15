@@ -26,7 +26,7 @@ export class askForPermission implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.requiredPermission);
+    //console.log(this.requiredPermission);
     this.decryptUserInfo(this.encryptedToken);
     this.checkPermission();
   }
