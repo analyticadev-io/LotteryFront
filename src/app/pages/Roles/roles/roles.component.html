@@ -1,0 +1,160 @@
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input
+    matInput
+    (keyup)="applyFilter($event)"
+    placeholder="Ex. Role Name"
+    #input
+  />
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <button nz-button nzType="primary" (click)="showModal('add')">
+    <span nz-icon nzType="lock" nzTheme="outline"></span>
+    {{ settings.add_permission_text }}
+  </button>
+
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="rolId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let row">{{ row.rolId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.nombre }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="permisos">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Permissions</th>
+      <td mat-cell *matCellDef="let row">
+        <div *ngFor="let permiso of row.permisos">
+          {{ permiso.descripcion }}
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="usuarios">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Users</th>
+      <td mat-cell *matCellDef="let row">
+        <div *ngFor="let usuario of row.usuarios">
+          {{ usuario }}
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ language.action_text }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <ng-container
+          *askForPermission="
+            settings.edit_permission_text +
+            '_' +
+            language.menu_option_module_name_Roles
+          "
+        >
+          <button nz-button nzType="primary" (click)="showModal('edit',row)">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </ng-container>
+
+        <ng-container
+          *askForPermission="
+            settings.delete_permission_text +
+            '_' +
+            language.menu_option_module_name_Roles
+          "
+        >
+          <button nz-button nzType="primary" (click)="showModal('delete',row)">
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">
+        No data matching the filter "{{ input.value }}"
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page of roles"
+  ></mat-paginator>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="nzTitle"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
+>
+<form [formGroup]="form">
+  <p *nzModalContent>
+    @if(modal_action==settings.add_permission_text) {
+
+      <mat-form-field appearance="fill">
+        <mat-label>{{ language.roles_fullname_input_form }}</mat-label>
+        <input matInput [placeholder]="language.roles_fullname_placeholder_input_form" formControlName="name">
+      </mat-form-field>
+
+      <ng-container formArrayName="permisos">
+        <ng-container *ngFor="let permisoGroup of permisosArray.controls; let i = index">
+          <div [formGroupName]="i">
+            <mat-checkbox formControlName="checked">
+              {{ permisoGroup.get('descripcion')?.value }}
+            </mat-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+
+
+    }@else if
+    (modal_action==settings.edit_permission_text) {
+
+      <mat-form-field appearance="fill">
+        <mat-label>{{ language.roles_fullname_input_form }}</mat-label>
+        <input matInput [placeholder]="language.roles_fullname_placeholder_input_form" formControlName="name">
+      </mat-form-field>
+
+      <ng-container formArrayName="permisos">
+        <ng-container *ngFor="let permisoGroup of permisosArray.controls; let i = index">
+          <div [formGroupName]="i">
+            <mat-checkbox formControlName="checked">
+              {{ permisoGroup.get('descripcion')?.value }}
+            </mat-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+    }@else if(modal_action==settings.delete_permission_text){
+
+      <mat-form-field appearance="fill">
+        <mat-label>{{ language.roles_fullname_input_form }}</mat-label>
+        <input matInput [placeholder]="language.roles_fullname_placeholder_input_form" formControlName="name" [attr.disabled]="modal_action === 'delete' ? true : null">
+      </mat-form-field>
+
+      <ng-container formArrayName="permisos">
+        <ng-container *ngFor="let permisoGroup of permisosArray.controls; let i = index">
+          <div [formGroupName]="i">
+            <mat-checkbox [disabled]="true" formControlName="checked">
+              {{ permisoGroup.get('descripcion')?.value }}
+            </mat-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+    }
+  </p>
+</form>
+</nz-modal>

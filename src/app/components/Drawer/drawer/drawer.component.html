@@ -1,0 +1,35 @@
+<ng-container>
+  <div style="height: 80px; width: 80px">
+    <button nz-button (click)="open()" nzType="primary" nzShape="circle">
+      <span nz-icon nzType="menu" nzTheme="outline"></span>
+    </button>
+  </div>
+
+  <nz-drawer
+    [nzClosable]="false"
+    [nzVisible]="visible"
+    nzPlacement="right"
+    nzTitle="{{ language.menu_Title }}"
+    (nzOnClose)="close()"
+  >
+    <ng-container *nzDrawerContent>
+      <div>
+        <div *askForPermission="settings.browse_permission_text + '_' + language.menu_option_module_name_Roles">
+          <div
+            *ngFor="let item of menuItems$ | async"
+            (click)="toggleVisibility(item.module_name)"
+            style="margin: 5% 5% 5% 5%; background-color: whitesmoke"
+          >
+            <div style="display: flex; flex-direction: row">
+              <button nz-button nzType="primary">
+                <span nz-icon nzType="{{ item.icon }}"></span>
+                {{ item.name }}
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </ng-container>
+  </nz-drawer>
+</ng-container>
