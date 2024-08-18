@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'LotteryFront' title`, () => {
+  it(`should have the 'BasicBackendTemplate' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('LotteryFront');
+    expect(app.title).toEqual('BasicBackendTemplate');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, LotteryFront');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, BasicBackendTemplate');
   });
 });

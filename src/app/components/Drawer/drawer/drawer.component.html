@@ -12,16 +12,18 @@
     nzTitle="{{ language.menu_Title }}"
     (nzOnClose)="close()"
   >
-    <ng-container *nzDrawerContent>
+
+  <ng-container *nzDrawerContent>
       <div>
-        <div *askForPermission="settings.browse_permission_text + '_' + language.menu_option_module_name_Roles">
+        <div >
+
           <div
             *ngFor="let item of menuItems$ | async"
             (click)="toggleVisibility(item.module_name)"
             style="margin: 5% 5% 5% 5%; background-color: whitesmoke"
           >
-            <div style="display: flex; flex-direction: row">
-              <button nz-button nzType="primary">
+            <div style="display: flex; flex-direction: row" >
+              <button nz-button nzType="primary" *askForPermission="settings.browse_permission_text + '_' + item.module_name">
                 <span nz-icon nzType="{{ item.icon }}"></span>
                 {{ item.name }}
               </button>
@@ -29,7 +31,9 @@
           </div>
 
         </div>
+
       </div>
     </ng-container>
+
   </nz-drawer>
 </ng-container>
