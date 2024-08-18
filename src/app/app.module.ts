@@ -54,6 +54,7 @@ import { LoginComponent } from './pages/Login/login/login.component';
 import { RegistroComponent } from './pages/Registro/registro/registro.component';
 import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
 import { RolesComponent } from './pages/Roles/roles/roles.component';
+import { ModulesComponent } from './pages/Modules/modules/modules.component';
 
 
 //NGX cookie service
@@ -102,7 +103,8 @@ registerLocaleData(en);
     RegistroComponent,
     DrawerComponent,
     RolesComponent,
-    //ModalComponent,
+    ModulesComponent,
+
     //Directives
     askForPermission,
 

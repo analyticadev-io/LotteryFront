@@ -12,8 +12,15 @@
         <p>Placeholder Content</p>
       </div>
       <div nz-col nzSpan="6">
-        <!-- Replace with actual content or remove -->
-        <p>Placeholder Content</p>
+
+
+          <div class="example-button-container">
+            <button mat-fab extended (click)="onLogOut()">
+              <mat-icon>logout</mat-icon>
+              Log out
+            </button>
+          </div>
+
       </div>
     </div>
   </nz-header>
@@ -23,6 +30,12 @@
         <app-roles
           *ngIf="activeComponent === language.menu_option_module_name_Roles"
         ></app-roles>
+      </div>
+
+      <div *ngIf="activeComponent$ | async as activeComponent">
+        <app-modules
+          *ngIf="activeComponent === language.menu_option_module_name_Modules"
+        ></app-modules>
       </div>
 
   </nz-content>
