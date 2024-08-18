@@ -30,6 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormArray, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 import {
   FormBuilder,
@@ -61,6 +62,7 @@ import { ResponseRolPermiso } from '../../../interfaces/ResponseRolPermiso';
     MatCheckboxModule,
     MatRadioModule,
     FormsModule,
+    MatCardModule
   ],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.css',

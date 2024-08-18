@@ -74,6 +74,23 @@ export const language = {
   permisos_fullname_input_form:'Permiso',
   permisos_fullname_placegolder_input_form:'Descripcion',
 
+  /**
+   * Modules
+   */
+  menu_option_display_name_Modules:"Creador de modulos",
+  menu_option_module_name_Modules:"modules",
+  modal_add_action_title:"Agregar modulo",
+  modal_edit_action_title:"Editar modulo",
+  modal_delete_action_title:"Eliminar modulo",
+  modal_form_select_module_placeholder:"Selecciona un modulo para añadir al sistema",
+  modal_form_input_name_modules_placeholder:"Ingresa un modulo para añadir al sistema",
+  modal_form_input_name_modules:"Nombre",
+  modal_form_input_module_placeholder:"Identificador del Modulo",
+  modal_form_input_module:"Modulo",
+  modal_form_input_icon_placeholder:"Icono",
+  modal_form_input_icon:"icono",
+  modal_form_input_icon_hint:"Lista de iconos",
+
   //---------------------
   // FIN ESPAÑOL
   //---------------------

@@ -1,0 +1,163 @@
+<mat-card appearance="outlined">
+  <mat-card-content>
+
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+      <button nz-button nzType="primary" (click)="showModal(settings.add_permission_text)">
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+        {{ settings.add_permission_text }}
+      </button>
+
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="module_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Module </th>
+          <td mat-cell *matCellDef="let element"> {{element.module_name}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="icon">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Icon </th>
+          <td mat-cell *matCellDef="let element"> {{element.icon}} </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container
+              *askForPermission="
+                settings.edit_permission_text +
+                '_' +
+                language.menu_option_module_name_Modules
+              "
+            >
+              <button nz-button nzType="primary" (click)="showModal(settings.edit_permission_text,element)">
+                <span nz-icon nzType="edit" nzTheme="outline"></span>
+              </button>
+            </ng-container>
+
+            <ng-container
+              *askForPermission="
+                settings.delete_permission_text +
+                '_' +
+                language.menu_option_module_name_Modules
+              "
+            >
+              <button nz-button nzType="primary" (click)="showModal(settings.delete_permission_text,element)">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- No Data Row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="2">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="nzTitle"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
+>
+  <p *nzModalContent>
+
+    <!-- Conditional Form -->
+    @if (modal_action === settings.add_permission_text) {
+
+      <form [formGroup]="form">
+
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_name_modules}}</mat-label>
+          <input matInput formControlName="name" placeholder="{{language.modal_form_input_name_modules_placeholder}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_module}}</mat-label>
+          <input readonly matInput formControlName="module_name" placeholder="{{language.modal_form_input_module_placeholder}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_icon}}</mat-label>
+          <input matInput formControlName="icon" placeholder="{{language.modal_form_input_icon_placeholder}}">
+          <mat-hint><a href="https://ng.ant.design/components/icon/en" target="_blank">{{language.modal_form_input_icon_hint}}</a></mat-hint>
+        </mat-form-field>
+
+      </form>
+
+
+    }@else if (modal_action === settings.edit_permission_text) {
+
+      <form [formGroup]="form">
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Actual</mat-label>
+          <input readonly formControlName="last_name" matInput>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Nuevo</mat-label>
+          <input formControlName="name" matInput placeholder="">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_module}}</mat-label>
+          <input readonly matInput formControlName="module_name" placeholder="{{language.modal_form_input_module_placeholder}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_icon}}</mat-label>
+          <input matInput formControlName="icon" placeholder="{{language.modal_form_input_icon_placeholder}}">
+          <mat-hint><a href="https://ng.ant.design/components/icon/en" target="_blank">{{language.modal_form_input_icon_hint}}</a></mat-hint>
+        </mat-form-field>
+
+        </form>
+
+    }@else if (modal_action === settings.delete_permission_text) {
+      <form [formGroup]="form">
+
+        <br>
+        <mat-form-field class="example-full-width">
+          <mat-label>Nuevo</mat-label>
+          <input readonly type="hidden" formControlName="last_name" matInput>
+          <input readonly formControlName="name" matInput placeholder="">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_module}}</mat-label>
+          <input readonly matInput formControlName="module_name" placeholder="{{language.modal_form_input_module_placeholder}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>{{language.modal_form_input_icon}}</mat-label>
+          <input readonly matInput formControlName="icon" placeholder="{{language.modal_form_input_icon_placeholder}}">
+          <mat-hint><a href="https://ng.ant.design/components/icon/en" target="_blank">{{language.modal_form_input_icon_hint}}</a></mat-hint>
+        </mat-form-field>
+
+        </form>
+    }
+
+  </p>
+</nz-modal>
