@@ -38,6 +38,12 @@
         ></app-modules>
       </div>
 
+      <div *ngIf="activeComponent$ | async as activeComponent">
+        <app-sorteos
+          *ngIf="activeComponent === language.menu_option_module_name_Sorteos"
+        ></app-sorteos>
+      </div>
+
   </nz-content>
   <nz-footer>
     <!-- Customize footer content -->

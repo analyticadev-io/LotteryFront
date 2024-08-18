@@ -91,6 +91,10 @@ export const language = {
   modal_form_input_icon:"icono",
   modal_form_input_icon_hint:"Lista de iconos",
 
+  //SORTEOS
+  menu_option_module_name_Sorteos:"sorteos",
+  //--
+
   //---------------------
   // FIN ESPAÑOL
   //---------------------

@@ -11,8 +11,12 @@
   />
 </mat-form-field>
 
-<div class="mat-elevation-z8">
-  <button nz-button nzType="primary" (click)="showModal('add')">
+<div class="mat-elevation-z8" >
+  <button nz-button nzType="primary" (click)="showModal('add')" *askForPermission="
+  settings.add_permission_text +
+  '_' +
+  language.menu_option_module_name_Roles
+  ">
     <span nz-icon nzType="lock" nzTheme="outline"></span>
     {{ settings.add_permission_text }}
   </button>

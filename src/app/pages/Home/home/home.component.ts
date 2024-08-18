@@ -17,6 +17,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import { AccesoService } from '../../../services/Acceso/acceso.service';
+import { SorteosComponent } from '../../Sorteos/sorteos/sorteos.component';
 
 @Component({
   selector: 'app-home',
@@ -30,13 +31,15 @@ import { AccesoService } from '../../../services/Acceso/acceso.service';
     ModulesComponent,
     MatIconModule,
     MatDividerModule,
-    MatButtonModule
+    MatButtonModule,
+    SorteosComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
   activeComponent$ = this.menuService.activeComponent$;
+  menuItems$ = this.menuService.menuItems$;
   public language = language;
   public encryptionKey = appsettings.cryptoJs_secure_MD5_crypted_key;
   encryptedToken = this.cookieService.get('userinfo');
@@ -59,7 +62,7 @@ export class HomeComponent {
       );
       const decryptedUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
       this.currentUser = decryptedUser as Usuario;
-      console.log(this.currentUser);
+      //console.log(this.currentUser);
     } catch (error) {}
   }
 

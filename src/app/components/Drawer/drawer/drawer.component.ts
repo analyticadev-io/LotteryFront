@@ -24,7 +24,9 @@ export class DrawerComponent {
   public language: any=language;
   public settings: any=appsettings;
 
-  constructor(private menuService: MenuOptionsService) {}
+  constructor(private menuService: MenuOptionsService) {
+    //console.log(this.menuItems$);
+  }
   visible = false;
   open(): void {
     this.visible = true;

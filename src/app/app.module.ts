@@ -55,7 +55,7 @@ import { RegistroComponent } from './pages/Registro/registro/registro.component'
 import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
 import { RolesComponent } from './pages/Roles/roles/roles.component';
 import { ModulesComponent } from './pages/Modules/modules/modules.component';
-
+import { SorteosComponent } from './pages/Sorteos/sorteos/sorteos.component';
 
 //NGX cookie service
 import {CookieService} from 'ngx-cookie-service';
@@ -104,6 +104,7 @@ registerLocaleData(en);
     DrawerComponent,
     RolesComponent,
     ModulesComponent,
+    SorteosComponent,
 
     //Directives
     askForPermission,
