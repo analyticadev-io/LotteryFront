@@ -5,6 +5,7 @@ import { appsettings } from '../../settings/appsettings';
 import { Rol } from '../../interfaces/Rol';
 import { UsuarioRol } from '../../interfaces/UsuarioRol';
 import { ResponseRolPermiso } from '../../interfaces/ResponseRolPermiso';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class RolesService {
   constructor() { }
 
   private http = inject(HttpClient)
-  private baseUrl:string = appsettings.apiBaseUrl
+  private baseUrl:string = environment.apiUrl
 
   GetRoles(): Observable<Rol[]> {
     return this.http.get<Rol[]>(`${this.baseUrl}Roles`);

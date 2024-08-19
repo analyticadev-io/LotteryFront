@@ -7,6 +7,7 @@ import { ResponseAcceso } from '../../interfaces/ResponseAcceso';
 import { Login } from '../../interfaces/Login';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
 export class AccesoService {
 
   private http = inject(HttpClient)
-  private baseUrl:string = appsettings.apiBaseUrl
+  private baseUrl:string = environment.apiUrl
   constructor(private cookieService:CookieService, private router: Router) { }
 
   Registro(objeto:Usuario): Observable<Usuario>{
