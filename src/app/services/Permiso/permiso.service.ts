@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../../settings/appsettings';
 import { Permiso } from '../../interfaces/Permiso';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 export class PermisoService {
 
   private http = inject(HttpClient)
-  private baseUrl:string = appsettings.apiBaseUrl
+  private baseUrl:string = environment.apiUrl
 
   constructor() { }
 

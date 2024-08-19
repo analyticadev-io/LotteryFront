@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../../settings/appsettings';
 import { Observable } from 'rxjs';
 import { MenuOptions } from '../../interfaces/MenuOptions';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { MenuOptions } from '../../interfaces/MenuOptions';
 export class ModulesService {
 
   private http = inject(HttpClient)
-  private baseUrl:string = appsettings.apiBaseUrl
+  private baseUrl:string = environment.apiUrl
 
 
 
