@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import * as CryptoJS from 'crypto-js';
+import { MenuOptionsService } from '../MenuOptions/menu-options.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AccesoService {
 
   private http = inject(HttpClient)
   private baseUrl:string = environment.apiUrl
-  constructor(private cookieService:CookieService, private router: Router) { }
+  constructor(private cookieService:CookieService, private router: Router, private _menuoptionsService:MenuOptionsService) { }
 
 
   encrypt(data: string): string {
@@ -60,6 +61,7 @@ decrypt(encryptedData: string): string {
     this.cookieService.deleteAll();
     localStorage.clear();
     this.router.navigate(['']);
+    this._menuoptionsService.toggleToOffAllOptions();
   }
 
 }

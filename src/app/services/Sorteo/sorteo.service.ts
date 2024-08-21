@@ -14,8 +14,24 @@ export class SorteoService {
   private baseUrl:string = environment.apiUrl
   constructor() { }
 
-  Sorteos(): Observable<ResponseSorteo>{
-    return this.http.get<ResponseSorteo>(`${this.baseUrl}Sorteos`)
+  GetSorteos(): Observable<ResponseSorteo[]>{
+    return this.http.get<ResponseSorteo[]>(`${this.baseUrl}Sorteos`)
+  }
+
+  GetSorteo(id:number): Observable<ResponseSorteo>{
+    return this.http.get<ResponseSorteo>(`${this.baseUrl}Sorteo/${id}`)
+  }
+
+  AddSorteo(sorteo:ResponseSorteo): Observable<ResponseSorteo>{
+    return this.http.post<ResponseSorteo>(`${this.baseUrl}Sorteos`,sorteo)
+  }
+
+  EditSorteo(sorteo:ResponseSorteo): Observable<ResponseSorteo>{
+    return this.http.put<ResponseSorteo>(`${this.baseUrl}Sorteos`,sorteo)
+  }
+
+  DeleteSorteo(id:number): Observable<ResponseSorteo>{
+    return this.http.delete<ResponseSorteo>(`${this.baseUrl}Sorteos/${id}`)
   }
 
 }
