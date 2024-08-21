@@ -1,45 +1,51 @@
 import { Router } from '@angular/router';
 import { AccesoService } from './../../../services/Acceso/acceso.service';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Login } from '../../../interfaces/Login';
 import { language } from '../../../settings/language';
 import { appsettings } from '../../../settings/appsettings';
 
-import {MatCardModule} from '@angular/material/card';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {CookieService} from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
+import { DecryptedResponse } from '../../../interfaces/DecryptedResponse';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatCardModule,MatFormFieldModule,MatInputModule,
-    MatButtonModule,ReactiveFormsModule,
+  imports: [
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-
   /**
    *
    */
-  constructor(private cookieService: CookieService) {
-
-
-  }
+  constructor(private cookieService: CookieService) {}
 
   private AccesoService = inject(AccesoService);
   private router = inject(Router);
   private formBuild = inject(FormBuilder);
-  public language: any=language;
+  public language: any = language;
   private _snackBar = inject(MatSnackBar);
-  private encryptionKey:string = appsettings.cryptoJs_secure_MD5_crypted_key;
+  private encryptionKey: string = appsettings.cryptoJs_secure_MD5_crypted_key;
 
   public formLogin: FormGroup = this.formBuild.group({
     NombreUsuario: ['', Validators.required],
@@ -49,35 +55,43 @@ export class LoginComponent {
   Login() {
     if (this.formLogin.invalid) return;
     const obj: Login = {
-      NombreUsuario:this.formLogin.value.NombreUsuario,
+      NombreUsuario: this.formLogin.value.NombreUsuario,
       contrasena: this.formLogin.value.contrasena,
     };
     this.AccesoService.Login(obj).subscribe({
-      next:(data)=>{
-        if(data.isSuccess){
+      next: (data) => {
+        if (data.isSuccess) {
+          const encryptedResponse = data.encryptedResponse;
+          const decryptedResponse =
+            this.AccesoService.decrypt(encryptedResponse);
+          const objResponse = JSON.parse(decryptedResponse);
 
-          const token = data.token.token;
+          //console.log(objResponse);
+
+          const token = objResponse.Token;
           //console.log('token original',token);
-          const userInfo = data.token.usuario;
-          const ciphertoken = CryptoJS.AES.encrypt(token, this.encryptionKey).toString();
-          //console.log('token encriptado en el login',ciphertoken);
-          const cipherUser = CryptoJS.AES.encrypt(JSON.stringify(userInfo), this.encryptionKey).toString();
-          this.cookieService.set('authToken', ciphertoken, { secure: true });
-          this.cookieService.set('userinfo', cipherUser, { secure: true });
+          const userInfo = objResponse.Usuario;
 
-          this.router.navigate(['home'])
-        }else{
+          const encryptedToken = this.AccesoService.encrypt(token);
+          const encryptUser = this.AccesoService.encrypt(JSON.stringify(userInfo));
+          //console.log('usuario cifrado: '+encryptUser );
+          this.cookieService.set('authToken', encryptedToken, { secure: true });
+          this.cookieService.set('userinfo', encryptUser, { secure: true });
+
+          this.router.navigate(['home']);
+        } else {
           this.openSnackBar(this.language.alert_invalid_login);
         }
-      },error:(error)=>{
-        console.error(error)
+      },
+      error: (error) => {
+        console.error(error);
         this.openSnackBar(this.language.alert_invalid_login);
-      }
-    })
+      },
+    });
   }
 
-  Registro(){
-    this.router.navigate(['registro'])
+  Registro() {
+    this.router.navigate(['registro']);
   }
 
   openSnackBar(message: string) {
@@ -85,6 +99,4 @@ export class LoginComponent {
       duration: appsettings.login_alert_duration_in_ss * 1000,
     });
   }
-
-
 }
