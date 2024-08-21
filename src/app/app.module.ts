@@ -23,6 +23,7 @@ import {MatDividerModule} from '@angular/material/divider';
 
 
 
+
 //ReactiveForms
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
@@ -46,6 +47,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 
 //Components
@@ -73,6 +75,8 @@ import { jwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interc
 //Directives
 import { askForPermission } from './Directives/ask-for-permissions.directive';
 
+//PRIME NG
+import { CalendarModule } from 'primeng/calendar';
 
 registerLocaleData(en);
 
@@ -105,9 +109,13 @@ registerLocaleData(en);
     RolesComponent,
     ModulesComponent,
     SorteosComponent,
+    NzCardModule,
 
     //Directives
     askForPermission,
+
+    //PRIME NG
+    CalendarModule,
 
 
   ],

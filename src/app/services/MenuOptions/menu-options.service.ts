@@ -5,45 +5,18 @@ import { language } from '../../settings/language';
 import { ModulesService } from '../Modules/modules.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MenuOptionsService {
-
-
   /**
    * Las opciens que controlaran dinamicamente las opciones del menu
-   *
-   * { name: language.menu_option_display_name_Roles, //nombre delacrado en ela rchivo de lenguaje
-      module_name: language.menu_option_module_name_Roles, //identificador delacrado en ela rchivo de lenguaje
-      visibilityStatus: false,  //inicializado en false apra no mostrar nada por defecto
-      icon:"lock" //icono, se usa ngzorro icons
-    }
-   *
    */
 
-    public newMenu= new BehaviorSubject<MenuOptions[]>([])
-
-  // private menuItemsSource = new BehaviorSubject<MenuOptions[]>([
-  //   { name: language.menu_option_display_name_Roles,
-  //     module_name: language.menu_option_module_name_Roles,
-  //     visibilityStatus: false,
-  //     icon:"lock"
-  //   },
-  //   { name: language.menu_option_display_name_Modules,
-  //     module_name: language.menu_option_module_name_Modules,
-  //     visibilityStatus: false,
-  //     icon:"unlock"
-  //   },
-  //   { name: "Modulo de prueba",
-  //     module_name: "nuevaPrueba",
-  //     visibilityStatus: false,
-  //     icon:"small-dash"
-  //   },
-  // ]);
+  public newMenu = new BehaviorSubject<MenuOptions[]>([]);
 
   constructor(private moduleService: ModulesService) {
     this.getDBModules();
-   }
+  }
 
   private activeComponentSource = new BehaviorSubject<string>('');
 
@@ -51,33 +24,44 @@ export class MenuOptionsService {
   activeComponent$ = this.activeComponentSource.asObservable();
 
   toggleVisibility(itemName: string): void {
-
-    const updatedMenuItems = this.newMenu.value.map(item => {
-      item.visibilityStatus = (item.module_name === itemName) ? !item.visibilityStatus : false;
+    const updatedMenuItems = this.newMenu.value.map((item) => {
+      item.visibilityStatus =
+        item.module_name === itemName ? !item.visibilityStatus : false;
       return item;
     });
     this.newMenu.next(updatedMenuItems);
 
-    const activeItem = updatedMenuItems.find(item => item.visibilityStatus);
+    const activeItem = updatedMenuItems.find((item) => item.visibilityStatus);
     this.activeComponentSource.next(activeItem ? activeItem.module_name : '');
   }
 
-  getDBModules(){
+  getDBModules() {
     this.moduleService.GetModules().subscribe({
-      next:(data)=>{
-        const menuObj: MenuOptions[] = data.map(module => ({
-          id:module.idModule,
+      next: (data) => {
+        const menuObj: MenuOptions[] = data.map((module) => ({
+          id: module.idModule,
           name: module.name, // Ajusta estos campos según el formato de los datos recibidos
           module_name: module.module_name,
-          visibilityStatus: false, // Inicializado en false o según tus necesidades
-          icon: module.icon || "no-icon" // Usa un valor predeterminado si no se proporciona
+          visibilityStatus: false,
+          icon: module.icon || 'no-icon',
         }));
         this.newMenu.next(menuObj);
-        console.log('servico menus',menuObj);
-      },error:(error)=>{
-
-      }
+        console.log('servico menus', menuObj);
+      },
+      error: (error) => {},
     });
   }
 
+  toggleToOffAllOptions() {
+    // Mapea todos los items del menú y establece visibilityStatus en false
+    const updatedMenuItems = this.newMenu.value.map((item) => {
+      item.visibilityStatus = false;
+      return item;
+    });
+
+    // Actualiza el BehaviorSubject con los items actualizados
+    this.newMenu.next(updatedMenuItems);
+    // Opcional: Si deseas que activeComponentSource también se desactive, puedes hacer:
+    this.activeComponentSource.next('');
+  }
 }
