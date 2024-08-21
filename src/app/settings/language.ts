@@ -93,6 +93,15 @@ export const language = {
 
   //SORTEOS
   menu_option_module_name_Sorteos:"sorteos",
+  menu_option_name_Sorteos:"Proximos sorteos",
+  table_column_name_date_Sorteos:"Fecha sorteo",
+  table_column_name_description_Sorteos:"Descripcion sorteo",
+  table_column_name_status_Sorteos:"Estado sorteo",
+  table_column_name_boletos_Sorteos:"Boletos sorteo",
+  table_column_name_nums_Sorteos:"Numeros sorteados",
+  modal_add_action_title_Sorteos:"Agregar un nuevo sorteo",
+  modal_edit_action_title_Sorteos:"Editar un sorteo",
+  modal_delete_action_title_Sorteos:"Eliminar un sorteo",
   //--
 
   //---------------------
