@@ -167,7 +167,7 @@ export class SorteosComponent implements OnInit {
             next:(data)=>{
               this.getSorteos();
             },error:(error)=>{
-              console.log(error);
+              console.error(error);
             }
           });
         break;

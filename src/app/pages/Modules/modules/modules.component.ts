@@ -124,7 +124,7 @@ export class ModulesComponent {
         break;
 
         case this.settings.delete_permission_text:
-          console.log(option);
+          //console.log(option);
           this.form.patchValue({ last_name: option?.idModule, name: option?.name, module_name:option?.module_name, icon:option?.icon });
           this.nzTitle = this.language.modal_delete_action_title;
 
@@ -155,7 +155,7 @@ export class ModulesComponent {
             this.getModules();
           },
           error: (error) => {
-            console.log(error);
+            console.error(error);
           },
         });
 
@@ -178,7 +178,7 @@ export class ModulesComponent {
             //console.log(data);
           },
           error: (error) => {
-            console.log(error);
+            console.error(error);
           },
         });
 
@@ -194,7 +194,7 @@ export class ModulesComponent {
               this.getModules();
             },
             error: (error) => {
-              console.log(error);
+              console.error(error);
             },
           });
 
