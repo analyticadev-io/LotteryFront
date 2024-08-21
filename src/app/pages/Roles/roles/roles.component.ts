@@ -186,7 +186,7 @@ export class RolesComponent implements AfterViewInit {
         }
       },
       error: (error) => {
-        console.log(error);
+        console.error(error);
       },
     });
   }
@@ -261,7 +261,7 @@ export class RolesComponent implements AfterViewInit {
     const permisosSeleccionados = this.form.value.permisos.filter(
       (permiso: any) => permiso.checked
     );
-    console.log(permisosSeleccionados);
+    //console.log(permisosSeleccionados);
 
     switch (this.modal_action) {
       case 'add':
@@ -272,7 +272,7 @@ export class RolesComponent implements AfterViewInit {
           nombre: this.form.value.name,
           permisos: permisosSeleccionados,
         };
-        console.log(newRolPermiso);
+        //console.log(newRolPermiso);
         if (this.form.invalid) return;
         this.rolesService.AddRol(newRolPermiso).subscribe({
           next: (data) => {
@@ -300,7 +300,7 @@ export class RolesComponent implements AfterViewInit {
           nombre: this.form.value.name,
           permisos: permisosSeleccionados,
         };
-        console.log(updateRolPermiso);
+        //console.log(updateRolPermiso);
         if (this.form.invalid && this.form.value.id!=0) return;
         this.rolesService.UpdateRol(updateRolPermiso).subscribe({
           next: (data) => {
@@ -329,7 +329,7 @@ export class RolesComponent implements AfterViewInit {
           nombre: this.form.value.name,
           permisos: permisosSeleccionados,
         };
-        console.log(deleteRolPermiso);
+        //console.log(deleteRolPermiso);
         if (this.form.invalid && this.form.value.id!=0) return;
         this.rolesService.DeleteRol(this.form.value.id).subscribe({
           next: (data) => {
