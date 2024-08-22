@@ -6,6 +6,7 @@ import { Rol } from '../../interfaces/Rol';
 import { UsuarioRol } from '../../interfaces/UsuarioRol';
 import { ResponseRolPermiso } from '../../interfaces/ResponseRolPermiso';
 import { environment } from '../../../environments/environment';
+import { EncryptedResponse } from '../../interfaces/EncryptedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +27,16 @@ export class RolesService {
     return this.http.get<Rol>(`${this.baseUrl}Roles/${id}`)
   }
 
-  AddRol(obj:Rol): Observable<Rol>{
-    return this.http.post<Rol>(`${this.baseUrl}Roles`,obj)
+  AddRol(crypt:EncryptedResponse): Observable<EncryptedResponse>{
+    return this.http.post<EncryptedResponse>(`${this.baseUrl}Roles`,crypt)
   }
 
-  UpdateRol(obj:Rol): Observable<Rol>{
-    return this.http.put<Rol>(`${this.baseUrl}Roles`,obj)
+  UpdateRol(obj:EncryptedResponse): Observable<EncryptedResponse>{
+    return this.http.put<EncryptedResponse>(`${this.baseUrl}Roles`,obj)
   }
 
-  DeleteRol(rolId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}Roles/${rolId}`);
+  DeleteRol(rolId: string): Observable<EncryptedResponse> {
+    return this.http.delete<EncryptedResponse>(`${this.baseUrl}Roles/${rolId}`);
   }
 
   AsignRol(obj:UsuarioRol): Observable<string>{

@@ -18,6 +18,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import { AccesoService } from '../../../services/Acceso/acceso.service';
 import { SorteosComponent } from '../../Sorteos/sorteos/sorteos.component';
+import { EncryptService } from '../../../services/Encrypt/encrypt.service';
 
 @Component({
   selector: 'app-home',
@@ -41,13 +42,14 @@ export class HomeComponent {
   activeComponent$ = this.menuService.activeComponent$;
   menuItems$ = this.menuService.menuItems$;
   public language = language;
-  public encryptionKey = appsettings.cryptoJs_secure_MD5_crypted_key;
+
   encryptedToken = this.cookieService.get('userinfo');
   public currentUser: Usuario = {} as Usuario;
   constructor(
     private menuService: MenuOptionsService,
     private cookieService: CookieService,
-    private accesoService:AccesoService
+    private accesoService:AccesoService,
+    private __encryptService:EncryptService
   ) {}
 
   ngOnInit(): void {
@@ -56,14 +58,12 @@ export class HomeComponent {
 
   decryptUserInfo(userCookie: string) {
     try {
-      const bytes = CryptoJS.AES.decrypt(
-        this.encryptedToken,
-        this.encryptionKey
-      );
-      const decryptedUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-      this.currentUser = decryptedUser as Usuario;
-      //console.log(this.currentUser);
-    } catch (error) {}
+      const decryptedUser =this.__encryptService.decrypt(this.encryptedToken);
+      this,this.currentUser = JSON.parse(decryptedUser) as Usuario;
+      //console.log('usuario en el home',this.currentUser);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   onLogOut() {

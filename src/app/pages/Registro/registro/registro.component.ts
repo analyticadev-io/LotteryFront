@@ -64,7 +64,7 @@ export class RegistroComponent {
   Registro() {
     if (this.formRegister.invalid) return;
     const object: Usuario = {
-      nombre: this.formRegister.value.nombre,
+      Nombre: this.formRegister.value.nombre,
       email: this.formRegister.value.email,
       contrasena: this.formRegister.value.contrasena,
       nombreUsuario: this.formRegister.value.nombreUsuario,
