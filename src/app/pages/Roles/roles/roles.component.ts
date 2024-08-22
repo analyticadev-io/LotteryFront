@@ -40,6 +40,8 @@ import {
 } from '@angular/forms';
 import { PermisoService } from '../../../services/Permiso/permiso.service';
 import { ResponseRolPermiso } from '../../../interfaces/ResponseRolPermiso';
+import { EncryptService } from '../../../services/Encrypt/encrypt.service';
+import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
 
 @Component({
   selector: 'app-roles',
@@ -62,7 +64,7 @@ import { ResponseRolPermiso } from '../../../interfaces/ResponseRolPermiso';
     MatCheckboxModule,
     MatRadioModule,
     FormsModule,
-    MatCardModule
+    MatCardModule,
   ],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.css',
@@ -97,7 +99,8 @@ export class RolesComponent implements AfterViewInit {
     private rolesService: RolesService,
     private fb: FormBuilder,
     private modalService: NzModalService,
-    private permisoService: PermisoService
+    private permisoService: PermisoService,
+    private _encryptService: EncryptService,
   ) {
     this.loadRoles();
     this.loadPermisos();
@@ -176,7 +179,7 @@ export class RolesComponent implements AfterViewInit {
             permisoId: permiso.permisoId,
             descripcion: permiso.descripcion,
             checked: rol
-              ? !!rol.permisos?.find((p) => p.permisoId === permiso.permisoId)
+              ? !!rol.Permisos?.find((p) => p.permisoId === permiso.permisoId)
               : false,
           });
           permisosArray.push(permisoGroup);
@@ -270,13 +273,20 @@ export class RolesComponent implements AfterViewInit {
         let newRolPermiso: Rol = {
           //rolId:this.form.value.id,
           nombre: this.form.value.name,
-          permisos: permisosSeleccionados,
+          Permisos: permisosSeleccionados,
         };
         //console.log(newRolPermiso);
+
+        const jsonStringNewRol = JSON.stringify(newRolPermiso);
+        const encryptedNewRol = this._encryptService.encrypt(jsonStringNewRol);
+        const crytp :EncryptedResponse={
+          response:encryptedNewRol
+        }
+
         if (this.form.invalid) return;
-        this.rolesService.AddRol(newRolPermiso).subscribe({
+        this.rolesService.AddRol(crytp).subscribe({
           next: (data) => {
-            if (data.rolId) {
+            if (data.response) {
               this.openSnackBar(this.language.alert_valid_add_roles);
               this.loadRoles();
               this.loadPermisos();
@@ -298,13 +308,21 @@ export class RolesComponent implements AfterViewInit {
         let updateRolPermiso: Rol = {
           rolId: this.form.value.id,
           nombre: this.form.value.name,
-          permisos: permisosSeleccionados,
+          Permisos: permisosSeleccionados,
         };
         //console.log(updateRolPermiso);
+
+        const jsonStringupdateRol = JSON.stringify(updateRolPermiso);
+        const encryptedupdateRol = this._encryptService.encrypt(jsonStringupdateRol);
+        const crytpUpdate :EncryptedResponse={
+          response:encryptedupdateRol
+        }
+
         if (this.form.invalid && this.form.value.id!=0) return;
-        this.rolesService.UpdateRol(updateRolPermiso).subscribe({
+        this.rolesService.UpdateRol(crytpUpdate).subscribe({
           next: (data) => {
-            if (data.rolId) {
+            console.log(data);
+            if (data.response) {
               this.openSnackBar(this.language.alert_valid_update_roles);
               this.loadRoles();
               this.loadPermisos();
@@ -323,19 +341,24 @@ export class RolesComponent implements AfterViewInit {
 
         case 'delete':
         //console.log('voy a editar');
-        // Aquí puedes enviar los datos al backend
-        let deleteRolPermiso: Rol = {
-          rolId: this.form.value.id,
-          nombre: this.form.value.name,
-          permisos: permisosSeleccionados,
-        };
-        //console.log(deleteRolPermiso);
-        if (this.form.invalid && this.form.value.id!=0) return;
-        this.rolesService.DeleteRol(this.form.value.id).subscribe({
+        //console.log(this.form.value.id);
+
+        let id= this.form.value.id;
+        id = id.toString();
+        const encyptedId = this._encryptService.encrypt(id);
+        if (this.form.invalid && this.form.value.id==0) return;
+        this.rolesService.DeleteRol(encyptedId).subscribe({
           next: (data) => {
-            this.language.alert_valid_delete_roles;
-            this.loadRoles();
-            this.loadPermisos();
+            if(data.response){
+              this.language.alert_valid_delete_roles;
+              this.loadRoles();
+              this.loadPermisos();
+            }else{
+              this.openSnackBar(
+                this.language.alert_invalid_delete_roles
+              );
+            }
+
           },
           error: (error) => {
             this.openSnackBar(

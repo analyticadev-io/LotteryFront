@@ -1,3 +1,4 @@
+
 import { Router } from '@angular/router';
 import { AccesoService } from './../../../services/Acceso/acceso.service';
 import { Component, inject } from '@angular/core';
@@ -20,6 +21,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
 import { DecryptedResponse } from '../../../interfaces/DecryptedResponse';
+import { EncryptService } from '../../../services/Encrypt/encrypt.service';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +43,7 @@ export class LoginComponent {
   constructor(private cookieService: CookieService) {}
 
   private AccesoService = inject(AccesoService);
+  private _encryptService = inject(EncryptService);
   private router = inject(Router);
   private formBuild = inject(FormBuilder);
   public language: any = language;
@@ -63,7 +66,7 @@ export class LoginComponent {
         if (data.isSuccess) {
           const encryptedResponse = data.encryptedResponse;
           const decryptedResponse =
-            this.AccesoService.decrypt(encryptedResponse);
+            this._encryptService.decrypt(encryptedResponse);
           const objResponse = JSON.parse(decryptedResponse);
 
           //console.log(objResponse);
@@ -72,8 +75,8 @@ export class LoginComponent {
           //console.log('token original',token);
           const userInfo = objResponse.Usuario;
 
-          const encryptedToken = this.AccesoService.encrypt(token);
-          const encryptUser = this.AccesoService.encrypt(JSON.stringify(userInfo));
+          const encryptedToken = this._encryptService.encrypt(token);
+          const encryptUser = this._encryptService.encrypt(JSON.stringify(userInfo));
           //console.log('usuario cifrado: '+encryptUser );
           this.cookieService.set('authToken', encryptedToken, { secure: true });
           this.cookieService.set('userinfo', encryptUser, { secure: true });

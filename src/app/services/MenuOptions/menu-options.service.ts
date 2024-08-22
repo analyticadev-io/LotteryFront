@@ -1,28 +1,26 @@
 import { Injectable } from '@angular/core';
-import { MenuOptions } from '../../interfaces/MenuOptions';
 import { BehaviorSubject } from 'rxjs';
-import { language } from '../../settings/language';
+import { MenuOptions } from '../../interfaces/MenuOptions';
 import { ModulesService } from '../Modules/modules.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MenuOptionsService {
-  /**
-   * Las opciens que controlaran dinamicamente las opciones del menu
-   */
-
+  // BehaviorSubject para mantener el estado de las opciones del menú
   public newMenu = new BehaviorSubject<MenuOptions[]>([]);
+  private activeComponentSource = new BehaviorSubject<string>('');
 
   constructor(private moduleService: ModulesService) {
     this.getDBModules();
+    //console.log('estoy en el servicio opciones');
   }
 
-  private activeComponentSource = new BehaviorSubject<string>('');
-
+  // Observable para observar los cambios en las opciones del menú
   menuItems$ = this.newMenu.asObservable();
   activeComponent$ = this.activeComponentSource.asObservable();
 
+  // Método para alternar la visibilidad de un ítem del menú
   toggleVisibility(itemName: string): void {
     const updatedMenuItems = this.newMenu.value.map((item) => {
       item.visibilityStatus =
@@ -52,16 +50,13 @@ export class MenuOptionsService {
     });
   }
 
+  // Método para desactivar todas las opciones del menú
   toggleToOffAllOptions() {
-    // Mapea todos los items del menú y establece visibilityStatus en false
     const updatedMenuItems = this.newMenu.value.map((item) => {
       item.visibilityStatus = false;
       return item;
     });
-
-    // Actualiza el BehaviorSubject con los items actualizados
     this.newMenu.next(updatedMenuItems);
-    // Opcional: Si deseas que activeComponentSource también se desactive, puedes hacer:
     this.activeComponentSource.next('');
   }
 }
