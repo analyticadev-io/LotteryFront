@@ -18,8 +18,8 @@ export class RolesService {
   private http = inject(HttpClient)
   private baseUrl:string = environment.apiUrl
 
-  GetRoles(): Observable<Rol[]> {
-    return this.http.get<Rol[]>(`${this.baseUrl}Roles`);
+  GetRoles(): Observable<EncryptedResponse> {
+    return this.http.get<EncryptedResponse>(`${this.baseUrl}Roles`);
   }
 
 

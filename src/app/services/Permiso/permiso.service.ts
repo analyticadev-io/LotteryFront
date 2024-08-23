@@ -4,6 +4,7 @@ import { appsettings } from '../../settings/appsettings';
 import { Permiso } from '../../interfaces/Permiso';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { EncryptedResponse } from '../../interfaces/EncryptedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class PermisoService {
 
   constructor() { }
 
-  GetPermisos(): Observable<Permiso[]> {
-    return this.http.get<Permiso[]>(`${this.baseUrl}Permisos`);
+  GetPermisos(): Observable<EncryptedResponse> {
+    return this.http.get<EncryptedResponse>(`${this.baseUrl}Permisos`);
   }
 
 

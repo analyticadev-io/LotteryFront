@@ -10,6 +10,7 @@ import {
   model,
   ViewChild,
   ChangeDetectionStrategy,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -28,7 +29,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule, NzModalService, NzModalRef } from 'ng-zorro-antd/modal';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormArray, FormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 
@@ -70,7 +71,7 @@ import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
   styleUrl: './roles.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RolesComponent implements AfterViewInit {
+export class RolesComponent implements  OnInit,AfterViewInit {
   private _snackBar = inject(MatSnackBar);
 
   public language = language;
@@ -91,7 +92,6 @@ export class RolesComponent implements AfterViewInit {
   response: ResponseRolPermiso[] = [];
   permisosArray: FormArray; // Nueva propiedad
 
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -100,16 +100,18 @@ export class RolesComponent implements AfterViewInit {
     private fb: FormBuilder,
     private modalService: NzModalService,
     private permisoService: PermisoService,
-    private _encryptService: EncryptService,
+    private _encryptService: EncryptService
   ) {
     this.loadRoles();
     this.loadPermisos();
+
     this.form = this.fb.group({
       id: [''],
-      name: ['',Validators.required],
+      name: ['', Validators.required],
       permisos: this.fb.array([]),
     });
     this.permisosArray = this.form.get('permisos') as FormArray;
+
   }
 
   /**
@@ -119,12 +121,50 @@ export class RolesComponent implements AfterViewInit {
    *
    * @returns
    */
-  private createPermissionControls(): { [key: string]: any } {
-    const controls: { [key: string]: any } = {};
-    this.permisos.forEach((permiso) => {
-      controls['permiso_' + permiso.permisoId] = [false];
+  // private createPermissionControls(): void {
+  //   const permisosArray = this.form.get('permisos') as FormArray;
+  //   // Limpiar el FormArray antes de agregar nuevos controles
+  // while (permisosArray.length !== 0) {
+  //   permisosArray.removeAt(0);
+  // }
+  //   this.permisos.forEach(permiso => {
+  //     permisosArray.push(
+  //       this.fb.group({
+  //         permisoId: [permiso.PermisoId],
+  //         descripcion: [permiso.Descripcion],
+  //         checked: [permiso.checked || false],  // o true si se quiere que esté marcado por defecto
+  //       })
+  //     );
+  //   });
+  // }
+
+
+  private createPermissionControls(rol?: Rol): void {
+    const permisosArray = this.form.get('permisos') as FormArray;
+
+    // Limpiar el FormArray antes de agregar nuevos controles
+    while (permisosArray.length !== 0) {
+      permisosArray.removeAt(0);
+    }
+
+    this.permisos.forEach(permiso => {
+      // Verificar si el permiso está en los permisos del rol
+      const isChecked = rol?.Permisos?.some(p => p.PermisoId === permiso.PermisoId) ?? false;
+
+      permisosArray.push(
+        this.fb.group({
+          permisoId: [permiso.PermisoId],
+          descripcion: [permiso.Descripcion],
+          checked: [isChecked],  // Marcar como checked si el permiso está asociado al rol
+        })
+      );
     });
-    return controls;
+  }
+
+
+  ngOnInit() {
+    this.loadPermisos();  // Asumiendo que loadPermisos llena this.permisos
+
   }
 
   ngAfterViewInit() {
@@ -150,9 +190,15 @@ export class RolesComponent implements AfterViewInit {
   loadRoles(): void {
     //console.log('Loading roles...');
     this.rolesService.GetRoles().subscribe(
-      (roles: Rol[]) => {
+      (data) => {
         //console.log('Roles loaded:', roles);
-        this.dataSource.data = roles;
+        if (data.response) {
+          let decryptResponse = this._encryptService.decrypt(data.response);
+          let roles = JSON.parse(decryptResponse) as Rol[];
+          console.log('Roles loaded:', roles);
+          this.dataSource.data = roles;
+        } else {
+        }
       },
       (error) => {
         console.error('Error loading roles:', error);
@@ -168,24 +214,17 @@ export class RolesComponent implements AfterViewInit {
    * @param {Rol} [rol]
    * @memberof RolesComponent
    */
-  loadPermisos(rol?: Rol): void {
+
+  loadPermisos(): void {
     this.permisoService.GetPermisos().subscribe({
       next: (data) => {
-        this.permisos = data;
-        const permisosArray = this.permisosArray;
-        permisosArray.clear(); // Limpiar permisos previos
-        this.permisos.forEach((permiso) => {
-          const permisoGroup = this.fb.group({
-            permisoId: permiso.permisoId,
-            descripcion: permiso.descripcion,
-            checked: rol
-              ? !!rol.Permisos?.find((p) => p.permisoId === permiso.permisoId)
-              : false,
-          });
-          permisosArray.push(permisoGroup);
-        });
-        if (rol && this.modal_action === 'delete') {
-          this.form.disable();
+        if (data.response) {
+          let decryptedResponse = this._encryptService.decrypt(data.response);
+          let permisosOBJ = JSON.parse(decryptedResponse) as Permiso[];
+          this.permisos = permisosOBJ;
+          this.createPermissionControls();
+        } else {
+          console.log('ERROR');
         }
       },
       error: (error) => {
@@ -193,8 +232,6 @@ export class RolesComponent implements AfterViewInit {
       },
     });
   }
-
-
 
   /**
    * Add - Edit - Delete Modal
@@ -204,7 +241,6 @@ export class RolesComponent implements AfterViewInit {
   isOkLoading = false;
   nzTitle: string = '';
   modal_action: string = '';
-
 
   /**
    *Este método muestra un modal para agregar, editar o eliminar un rol.
@@ -221,23 +257,25 @@ export class RolesComponent implements AfterViewInit {
       case 'add':
         this.nzTitle = 'Agregar'; // Title for adding
         this.modal_action = action;
+        //this.loadPermisos();
         break;
 
       case 'edit':
         this.nzTitle = 'Editar'; // Title for editing
         this.modal_action = action;
         if (rol) {
-          this.form.patchValue({ name: rol.nombre, id: rol.rolId }); // Setear el nombre del rol
-          this.loadPermisos(rol); // Cargar los permisos del rol
+          this.form.patchValue({ name: rol.Nombre, id: rol.RolId }); // Setear el nombre del rol
+
         }
+        this.createPermissionControls(rol);
         break;
 
       case 'delete':
         this.nzTitle = 'Eliminar'; // Title for editing
         this.modal_action = action;
         if (rol) {
-          this.form.patchValue({ name: rol.nombre, id: rol.rolId }); // Setear el nombre del rol
-          this.loadPermisos(rol); // Cargar los permisos del rol
+          this.form.patchValue({ name: rol.Nombre, id: rol.RolId }); // Setear el nombre del rol
+          this.createPermissionControls(rol);
           this.form.disable(); // Deshabilitar el formulario
         }
         break;
@@ -251,7 +289,6 @@ export class RolesComponent implements AfterViewInit {
   handleCancel(): void {
     this.isVisible = false;
   }
-
 
   /**
    * Este método maneja las acciones de un modal para agregar, editar o eliminar roles.
@@ -272,16 +309,16 @@ export class RolesComponent implements AfterViewInit {
         // Aquí puedes enviar los datos al backend
         let newRolPermiso: Rol = {
           //rolId:this.form.value.id,
-          nombre: this.form.value.name,
+          Nombre: this.form.value.name,
           Permisos: permisosSeleccionados,
         };
         //console.log(newRolPermiso);
 
         const jsonStringNewRol = JSON.stringify(newRolPermiso);
         const encryptedNewRol = this._encryptService.encrypt(jsonStringNewRol);
-        const crytp :EncryptedResponse={
-          response:encryptedNewRol
-        }
+        const crytp: EncryptedResponse = {
+          response: encryptedNewRol,
+        };
 
         if (this.form.invalid) return;
         this.rolesService.AddRol(crytp).subscribe({
@@ -306,19 +343,20 @@ export class RolesComponent implements AfterViewInit {
         //console.log('voy a editar');
         // Aquí puedes enviar los datos al backend
         let updateRolPermiso: Rol = {
-          rolId: this.form.value.id,
-          nombre: this.form.value.name,
+          RolId: this.form.value.id,
+          Nombre: this.form.value.name,
           Permisos: permisosSeleccionados,
         };
         //console.log(updateRolPermiso);
 
         const jsonStringupdateRol = JSON.stringify(updateRolPermiso);
-        const encryptedupdateRol = this._encryptService.encrypt(jsonStringupdateRol);
-        const crytpUpdate :EncryptedResponse={
-          response:encryptedupdateRol
-        }
+        const encryptedupdateRol =
+          this._encryptService.encrypt(jsonStringupdateRol);
+        const crytpUpdate: EncryptedResponse = {
+          response: encryptedupdateRol,
+        };
 
-        if (this.form.invalid && this.form.value.id!=0) return;
+        if (this.form.invalid && this.form.value.id != 0) return;
         this.rolesService.UpdateRol(crytpUpdate).subscribe({
           next: (data) => {
             console.log(data);
@@ -339,26 +377,23 @@ export class RolesComponent implements AfterViewInit {
         this.isOkLoading = false;
         break;
 
-        case 'delete':
+      case 'delete':
         //console.log('voy a editar');
         //console.log(this.form.value.id);
 
-        let id= this.form.value.id;
+        let id = this.form.value.id;
         id = id.toString();
         const encyptedId = this._encryptService.encrypt(id);
-        if (this.form.invalid && this.form.value.id==0) return;
+        if (this.form.invalid && this.form.value.id == 0) return;
         this.rolesService.DeleteRol(encyptedId).subscribe({
           next: (data) => {
-            if(data.response){
+            if (data.response) {
               this.language.alert_valid_delete_roles;
               this.loadRoles();
               this.loadPermisos();
-            }else{
-              this.openSnackBar(
-                this.language.alert_invalid_delete_roles
-              );
+            } else {
+              this.openSnackBar(this.language.alert_invalid_delete_roles);
             }
-
           },
           error: (error) => {
             this.openSnackBar(
@@ -387,7 +422,4 @@ export class RolesComponent implements AfterViewInit {
       duration: appsettings.login_alert_duration_in_ss,
     });
   }
-
 }
-
-
