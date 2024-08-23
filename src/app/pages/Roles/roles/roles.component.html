@@ -24,19 +24,19 @@
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="rolId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let row">{{ row.rolId }}</td>
+      <td mat-cell *matCellDef="let row">{{ row.RolId }}</td>
     </ng-container>
 
     <ng-container matColumnDef="nombre">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let row">{{ row.nombre }}</td>
+      <td mat-cell *matCellDef="let row">{{ row.Nombre }}</td>
     </ng-container>
 
     <ng-container matColumnDef="permisos">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Permissions</th>
       <td mat-cell *matCellDef="let row">
-        <div *ngFor="let permiso of row.permisos">
-          {{ permiso.descripcion }}
+        <div *ngFor="let permiso of row.Permisos">
+          {{ permiso.Descripcion }}
         </div>
       </td>
     </ng-container>
@@ -44,7 +44,7 @@
     <ng-container matColumnDef="usuarios">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Users</th>
       <td mat-cell *matCellDef="let row">
-        <div *ngFor="let usuario of row.usuarios">
+        <div *ngFor="let usuario of row.Usuarios">
           {{ usuario }}
         </div>
       </td>
@@ -123,8 +123,6 @@
           </div>
         </ng-container>
       </ng-container>
-
-
 
     }@else if
     (modal_action==settings.edit_permission_text) {

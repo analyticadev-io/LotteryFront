@@ -1,8 +1,8 @@
 import { Permiso } from './Permiso';
 import { Usuario } from './Usuario';
 export interface Rol {
-  rolId?:number,
-  nombre:string,
+  RolId?:number,
+  Nombre:string,
   Permisos?:Permiso[],
-  usuarios?:Usuario[]
+  Usuarios?:Usuario[]
 }
