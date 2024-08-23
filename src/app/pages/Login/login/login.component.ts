@@ -22,6 +22,7 @@ import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
 import { DecryptedResponse } from '../../../interfaces/DecryptedResponse';
 import { EncryptService } from '../../../services/Encrypt/encrypt.service';
+import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
 
 @Component({
   selector: 'app-login',
@@ -61,27 +62,31 @@ export class LoginComponent {
       NombreUsuario: this.formLogin.value.NombreUsuario,
       contrasena: this.formLogin.value.contrasena,
     };
-    this.AccesoService.Login(obj).subscribe({
+
+    let jsonRequest = JSON.stringify(obj);
+    let encryptedRequest = this._encryptService.encrypt(jsonRequest);
+    let loginEncrypted : EncryptedResponse={
+      response:encryptedRequest
+    };
+
+    this.AccesoService.Login(loginEncrypted).subscribe({
       next: (data) => {
         if (data.isSuccess) {
           const encryptedResponse = data.encryptedResponse;
           const decryptedResponse =
             this._encryptService.decrypt(encryptedResponse);
           const objResponse = JSON.parse(decryptedResponse);
-
           //console.log(objResponse);
-
           const token = objResponse.Token;
           //console.log('token original',token);
           const userInfo = objResponse.Usuario;
-
           const encryptedToken = this._encryptService.encrypt(token);
           const encryptUser = this._encryptService.encrypt(JSON.stringify(userInfo));
           //console.log('usuario cifrado: '+encryptUser );
           this.cookieService.set('authToken', encryptedToken, { secure: true });
           this.cookieService.set('userinfo', encryptUser, { secure: true });
-
           this.router.navigate(['home']);
+
         } else {
           this.openSnackBar(this.language.alert_invalid_login);
         }

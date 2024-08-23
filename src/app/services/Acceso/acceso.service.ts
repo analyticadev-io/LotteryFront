@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 import { EncryptService } from '../Encrypt/encrypt.service';
+import { EncryptedResponse } from '../../interfaces/EncryptedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -25,13 +26,8 @@ export class AccesoService {
     return this.http.post<Usuario>(`${this.baseUrl}Acceso/Registro`,objeto)
   }
 
-  Login(objeto:Login): Observable<ResponseAcceso>{
-    const encryptedPassword = this._encrypt.encrypt(objeto.contrasena);
-    // Reemplaza la contraseña en el objeto con la versión encriptada
-    const loginData = { ...objeto, contrasena: encryptedPassword };
-    //console.log(encryptedPassword);
-    //console.log(loginData);
-    return this.http.post<ResponseAcceso>(`${this.baseUrl}Acceso/Login`,loginData)
+  Login(objeto:EncryptedResponse): Observable<ResponseAcceso>{
+    return this.http.post<ResponseAcceso>(`${this.baseUrl}Acceso/Login`,objeto)
   }
 
   LogOut(){
