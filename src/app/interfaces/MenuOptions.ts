@@ -1,8 +1,8 @@
 export interface MenuOptions {
-  idModule?:number;
-  name: string;
+  IdModule?:number;
+  Name: string;
   module_name: string;
-  visibilityStatus?: boolean;
+  visibilityStatus?: string;
   icon?:string;
   last_module_name?: string;
 }
