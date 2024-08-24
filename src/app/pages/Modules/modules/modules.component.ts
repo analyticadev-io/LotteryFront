@@ -17,6 +17,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { ReactiveFormsModule } from '@angular/forms';
+import { EncryptService } from '../../../services/Encrypt/encrypt.service';
+import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
 
 
 interface Food {
@@ -69,7 +71,8 @@ export class ModulesComponent {
   constructor(
     private moduleService: ModulesService,
     private menuService: MenuOptionsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _encryptService:EncryptService
   ) {
     this.getModules();
 
@@ -92,9 +95,16 @@ export class ModulesComponent {
 
   getModules(): void {
     this.moduleService.GetModules().subscribe({
-      next: (data: MenuOptions[]) => {
-        this.modules = data;
-        this.dataSource.data = this.modules;
+      next: (data) => {
+        if(data.response){
+          let decryptMenu = this._encryptService.decrypt(data.response);
+          let objMenu = JSON.parse(decryptMenu)as MenuOptions[];
+          this.modules = objMenu;
+          this.dataSource.data = this.modules;
+        }else{
+          console.error('Error: Modules component: ',this.modules)
+        }
+
       },
       error: (error: any) => {
         console.error('Error al obtener los módulos:', error);
@@ -124,8 +134,8 @@ export class ModulesComponent {
         break;
 
         case this.settings.delete_permission_text:
-          //console.log(option);
-          this.form.patchValue({ last_name: option?.idModule, name: option?.name, module_name:option?.module_name, icon:option?.icon });
+          console.log(option);
+          this.form.patchValue({ last_name: option?.IdModule, name: option?.Name, module_name:option?.module_name, icon:option?.icon });
           this.nzTitle = this.language.modal_delete_action_title;
 
           break;
@@ -143,16 +153,28 @@ export class ModulesComponent {
       case this.settings.add_permission_text:
         if (this.form.invalid) return;
         const object: MenuOptions = {
-          name: this.form.value.name,
+          Name: this.form.value.name,
           module_name: this.form.value.module_name,
           icon:this.form.value.icon,
-          visibilityStatus:false,
+          visibilityStatus:"false",
         };
-        this.moduleService.AddModule(object).subscribe({
+
+        var jsonRequest = JSON.stringify(object);
+        var crypt = this._encryptService.encrypt(jsonRequest);
+        var encryptedRequest : EncryptedResponse={
+          response:crypt
+        };
+
+        this.moduleService.AddModule(encryptedRequest).subscribe({
           next: (data) => {
             //console.log(data);
-            this.form.reset();
-            this.getModules();
+            if(data.response){
+              var decryptResponse = this._encryptService.decrypt(data.response);
+              console.log(decryptResponse);
+              this.form.reset();
+              this.getModules();
+            }
+
           },
           error: (error) => {
             console.error(error);
@@ -165,13 +187,20 @@ export class ModulesComponent {
         //console.log(this.form);
         if (this.form.invalid) return;
         const editModule: MenuOptions = {
-          name: this.form.value.name,
+          Name: this.form.value.name,
           module_name: this.form.value.module_name,
           last_module_name: this.form.value.last_name,
           icon: this.form.value.icon,
-          visibilityStatus:false
+          visibilityStatus:"false"
         };
-        this.moduleService.EditModule(editModule).subscribe({
+
+        var jsonRequest = JSON.stringify(editModule);
+        var crypt = this._encryptService.encrypt(jsonRequest);
+        var encryptedRequest : EncryptedResponse={
+          response:crypt
+        };
+
+        this.moduleService.EditModule(encryptedRequest).subscribe({
           next: (data) => {
             this.getModules();
             this.form.reset();
@@ -186,12 +215,22 @@ export class ModulesComponent {
 
         case this.settings.delete_permission_text:
           if (this.form.invalid) return;
+          var id:number = this.form.value.last_name
+          var encryptId = this._encryptService.encrypt(id.toString());
+          var encryptedRequest : EncryptedResponse={
+            response:encryptId
+          };
 
-          this.moduleService.DeleteModule(parseInt(this.form.value.last_name,10)).subscribe({
+          this.moduleService.DeleteModule(encryptedRequest).subscribe({
             next: (data) => {
               //console.log(data);
-              this.form.reset();
-              this.getModules();
+              if(data.response){
+                this.form.reset();
+                this.getModules();
+              }else{
+                console.error("ERROR: DELETE--Modules.compenent.ts");
+              }
+
             },
             error: (error) => {
               console.error(error);
