@@ -14,7 +14,7 @@ export class MenuOptionsService {
 
   constructor(private moduleService: ModulesService, private _encryptservice:EncryptService) {
     this.getDBModules();
-    console.log('estoy en el servicio opciones');
+    //console.log('estoy en el servicio opciones');
   }
 
   // Observable para observar los cambios en las opciones del menú
@@ -56,7 +56,7 @@ export class MenuOptionsService {
           let decryptedResponse = this._encryptservice.decrypt(data.response);
           //console.log(decryptedResponse)
           let objMenu = JSON.parse(decryptedResponse) as MenuOptions[];
-          console.log('obj menus', objMenu);
+          //console.log('obj menus', objMenu);
           const menuObj: MenuOptions[] = objMenu.map((module) => ({
             id: module.IdModule,
             Name: module.Name, // Ajusta estos campos según el formato de los datos recibidos
@@ -65,9 +65,9 @@ export class MenuOptionsService {
             icon: module.icon || 'no-icon',
           }));
           this.newMenu.next(menuObj);
-          console.log('servico menus', menuObj);
+          //console.log('servico menus', menuObj);
         }else{
-
+          console.error("ERROR: obtaninig response menu-options.service.ts");
         }
 
       },

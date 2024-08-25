@@ -14,7 +14,7 @@ import { askForPermission } from '../../../Directives/ask-for-permissions.direct
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import {
   FormBuilder,
@@ -26,6 +26,9 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { CalendarModule } from 'primeng/calendar';
 
 import moment from 'moment-timezone';
+import { EncryptService } from '../../../services/Encrypt/encrypt.service';
+import { Sorteo } from '../../../interfaces/Sorteo';
+import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
 
 @Component({
   selector: 'app-sorteos',
@@ -48,7 +51,7 @@ import moment from 'moment-timezone';
   templateUrl: './sorteos.component.html',
   styleUrl: './sorteos.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers:[provideNativeDateAdapter()]
+  providers: [provideNativeDateAdapter()],
 })
 export class SorteosComponent implements OnInit {
   sorteos: ResponseSorteo[] = [];
@@ -79,13 +82,16 @@ export class SorteosComponent implements OnInit {
   /**
    *
    */
-  constructor(private _sorteosService: SorteoService,private fb: FormBuilder) {
+  constructor(
+    private _sorteosService: SorteoService,
+    private fb: FormBuilder,
+    private _encriptadoSerivice: EncryptService
+  ) {
     this.form = this.fb.group({
       sorteoId: [''],
-      descripcion: ['',Validators.required],
-      fechaSorteo: [null,Validators.required]
+      descripcion: ['', Validators.required],
+      fechaSorteo: [null, Validators.required],
     });
-
   }
   ngOnInit(): void {
     this.getSorteos();
@@ -93,10 +99,20 @@ export class SorteosComponent implements OnInit {
 
   public getSorteos(): void {
     this._sorteosService.GetSorteos().subscribe({
-      next: (data: ResponseSorteo[]) => {
+      next: (data) => {
+        if (data.response) {
+          var encryptedResponse = this._encriptadoSerivice.decrypt(
+            data.response
+          );
+          var objSorteos = JSON.parse(encryptedResponse) as ResponseSorteo[];
+          this.dataSource.data = objSorteos;
+          this.loading = false;
+          console.log(encryptedResponse);
+          console.log(objSorteos);
+        } else {
+        }
+
         //console.log('Fetched sorteos:', data); // Confirm data is fetched
-        this.dataSource.data = data;
-        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching sorteos:', error);
@@ -105,106 +121,136 @@ export class SorteosComponent implements OnInit {
     });
   }
 
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  showModal(action: string, model?:ResponseSorteo): void {
+  showModal(action: string, model?: ResponseSorteo): void {
     this.isVisible = true;
-    const dateObject = moment(model?.fechaSorteo).tz('America/Guayaquil').toDate();
+    const dateObject = moment(model?.FechaSorteo)
+      .tz('America/Guayaquil')
+      .toDate();
     switch (action) {
       case appsettings.add_permission_text:
         this.modalAction = action;
         this.modalTitle = language.modal_add_action_title_Sorteos;
         break;
 
-        case appsettings.edit_permission_text:
-          //console.log();
-          this.modalAction = action;
-          this.modalTitle = language.modal_edit_action_title_Sorteos;
-          this.form.patchValue({
-            sorteoId: model?.sorteoId,
-            descripcion: model?.descripcion,
-            fechaSorteo: dateObject
-          });
-          break;
+      case appsettings.edit_permission_text:
+        //console.log();
+        this.modalAction = action;
+        this.modalTitle = language.modal_edit_action_title_Sorteos;
+        this.form.patchValue({
+          sorteoId: model?.SorteoId,
+          descripcion: model?.Descripcion,
+          fechaSorteo: dateObject,
+        });
+        break;
 
-          case appsettings.delete_permission_text:
-            //console.log();
-            this.modalAction = action;
-            this.modalTitle = language.modal_delete_action_title_Sorteos;
-            this.form.patchValue({
-              sorteoId: model?.sorteoId,
-              descripcion: model?.descripcion,
-              fechaSorteo: dateObject
-            });
-            break;
+      case appsettings.delete_permission_text:
+        //console.log();
+        this.modalAction = action;
+        this.modalTitle = language.modal_delete_action_title_Sorteos;
+        this.form.patchValue({
+          sorteoId: model?.SorteoId,
+          descripcion: model?.Descripcion,
+          fechaSorteo: dateObject,
+        });
+        break;
 
       default:
         this.isVisible = false;
         break;
     }
-
-
   }
 
   handleOk(): void {
     //console.log(this.form);
     this.isOkLoading = true;
 
-    let fecha = this.getFormattedDate(this.form.value.fechaSorteo)
-    switch(this.modalAction){
+    let fecha = this.getFormattedDate(this.form.value.fechaSorteo);
+    switch (this.modalAction) {
       case appsettings.add_permission_text:
-          if(this.form.invalid) return;
-          let newSorteo:ResponseSorteo={
-            descripcion:this.form.value.descripcion,
-            fechaSorteo:fecha,
-          }
-          //console.log(newSorteo);
-          this._sorteosService.AddSorteo(newSorteo).subscribe({
-            next:(data)=>{
+        if (this.form.invalid) return;
+        let newSorteo: ResponseSorteo = {
+          Descripcion: this.form.value.descripcion,
+          FechaSorteo: fecha,
+        };
+        //console.log(newSorteo);
+
+        var jsonSorteo = JSON.stringify(newSorteo);
+        var encryptedRequest = this._encriptadoSerivice.encrypt(jsonSorteo);
+        var request : EncryptedResponse={
+          response:encryptedRequest
+        }
+
+        this._sorteosService.AddSorteo(request).subscribe({
+          next: (data) => {
+            if(data.response){
               this.getSorteos();
-            },error:(error)=>{
-              console.error(error);
+            }else{
+              console.error("ERROR: sorteos.component.ts  **ADD ACTION**");
             }
-          });
+
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
         break;
 
-        case appsettings.edit_permission_text:
-          if(this.form.invalid && this.form.value.sorteoId!=null) return;
-          let editSorteo:ResponseSorteo={
-            sorteoId:this.form.value.sorteoId,
-            descripcion:this.form.value.descripcion,
-            fechaSorteo:fecha,
-          }
-          //console.log(editSorteo);
-          this._sorteosService.EditSorteo(editSorteo).subscribe({
-            next:(data)=>{
+      case appsettings.edit_permission_text:
+        if (this.form.invalid && this.form.value.sorteoId != null) return;
+        let editSorteo: ResponseSorteo = {
+          SorteoId: this.form.value.sorteoId,
+          Descripcion: this.form.value.descripcion,
+          FechaSorteo: fecha,
+        };
+        var jsonRequest = JSON.stringify(editSorteo);
+        var encryptedRequest = this._encriptadoSerivice.encrypt(jsonRequest);
+        var request : EncryptedResponse={
+          response:encryptedRequest
+        }
+        //console.log(editSorteo);
+        this._sorteosService.EditSorteo(request).subscribe({
+          next: (data) => {
+            if(data.response){
               this.getSorteos();
-            },error:(error)=>{
-              console.log(error);
+            }else{
+              console.error("ERROR: sorteos.component.ts  **EDIT ACTION**");
             }
-          });
+
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
         break;
 
-        case appsettings.delete_permission_text:
-          if(this.form.invalid && this.form.value.sorteoId!=null) return;
-          this._sorteosService.DeleteSorteo(this.form.value.sorteoId).subscribe({
-            next:(data)=>{
+      case appsettings.delete_permission_text:
+        if (this.form.invalid && this.form.value.sorteoId != null) return;
+        var id:number = this.form.value.sorteoId;
+        var encryptedId = this._encriptadoSerivice.encrypt(id.toString())
+        this._sorteosService.DeleteSorteo(encryptedId).subscribe({
+          next: (data) => {
+            if(data.response){
               this.getSorteos();
-            },error:(error)=>{
-              console.log(error);
+
+            }else{
+              console.error("ERROR: sorteos.component.ts  **DELETE ACTION**");
             }
-          });
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
         break;
 
       default:
         this.isVisible = false;
         this.isOkLoading = false;
         break;
-
     }
 
     this.isVisible = false;
@@ -216,7 +262,8 @@ export class SorteosComponent implements OnInit {
   }
 
   getFormattedDate(dateString: string): string {
-    return moment(dateString).tz('America/Guayaquil').format('YYYY-MM-DD HH:mm:ss');
+    return moment(dateString)
+      .tz('America/Guayaquil')
+      .format('YYYY-MM-DD HH:mm:ss');
   }
-
 }

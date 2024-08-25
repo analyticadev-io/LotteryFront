@@ -134,7 +134,7 @@ export class ModulesComponent {
         break;
 
         case this.settings.delete_permission_text:
-          console.log(option);
+          //console.log(option);
           this.form.patchValue({ last_name: option?.IdModule, name: option?.Name, module_name:option?.module_name, icon:option?.icon });
           this.nzTitle = this.language.modal_delete_action_title;
 
@@ -170,7 +170,7 @@ export class ModulesComponent {
             //console.log(data);
             if(data.response){
               var decryptResponse = this._encryptService.decrypt(data.response);
-              console.log(decryptResponse);
+              //console.log(decryptResponse);
               this.form.reset();
               this.getModules();
             }
