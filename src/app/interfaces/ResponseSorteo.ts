@@ -1,8 +1,8 @@
 export interface ResponseSorteo{
-  sorteoId?: number,
-  fechaSorteo?: string,
-  descripcion?:string,
+  SorteoId?: number,
+  FechaSorteo?: string,
+  Descripcion?:string,
   status?:string,
-  boletos?: any[],
-  numerosSorteos?: any[]
+  Boletos?: any[],
+  NumerosSorteos?: any[]
 }

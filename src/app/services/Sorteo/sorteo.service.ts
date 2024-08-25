@@ -4,6 +4,7 @@ import { appsettings } from '../../settings/appsettings';
 import { ResponseSorteo } from '../../interfaces/ResponseSorteo';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { EncryptedResponse } from '../../interfaces/EncryptedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,24 +15,24 @@ export class SorteoService {
   private baseUrl:string = environment.apiUrl
   constructor() { }
 
-  GetSorteos(): Observable<ResponseSorteo[]>{
-    return this.http.get<ResponseSorteo[]>(`${this.baseUrl}Sorteos`)
+  GetSorteos(): Observable<EncryptedResponse>{
+    return this.http.get<EncryptedResponse>(`${this.baseUrl}Sorteos`)
   }
 
   GetSorteo(id:number): Observable<ResponseSorteo>{
     return this.http.get<ResponseSorteo>(`${this.baseUrl}Sorteo/${id}`)
   }
 
-  AddSorteo(sorteo:ResponseSorteo): Observable<ResponseSorteo>{
-    return this.http.post<ResponseSorteo>(`${this.baseUrl}Sorteos`,sorteo)
+  AddSorteo(sorteo:EncryptedResponse): Observable<EncryptedResponse>{
+    return this.http.post<EncryptedResponse>(`${this.baseUrl}Sorteos`,sorteo)
   }
 
-  EditSorteo(sorteo:ResponseSorteo): Observable<ResponseSorteo>{
-    return this.http.put<ResponseSorteo>(`${this.baseUrl}Sorteos`,sorteo)
+  EditSorteo(sorteo:EncryptedResponse): Observable<EncryptedResponse>{
+    return this.http.put<EncryptedResponse>(`${this.baseUrl}Sorteos`,sorteo)
   }
 
-  DeleteSorteo(id:number): Observable<ResponseSorteo>{
-    return this.http.delete<ResponseSorteo>(`${this.baseUrl}Sorteos/${id}`)
+  DeleteSorteo(id:string): Observable<EncryptedResponse>{
+    return this.http.delete<EncryptedResponse>(`${this.baseUrl}Sorteos/${id}`)
   }
 
 }

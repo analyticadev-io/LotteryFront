@@ -195,7 +195,7 @@ export class RolesComponent implements  OnInit,AfterViewInit {
         if (data.response) {
           let decryptResponse = this._encryptService.decrypt(data.response);
           let roles = JSON.parse(decryptResponse) as Rol[];
-          console.log('Roles loaded:', roles);
+          //console.log('Roles loaded:', roles);
           this.dataSource.data = roles;
         } else {
         }
@@ -224,7 +224,7 @@ export class RolesComponent implements  OnInit,AfterViewInit {
           this.permisos = permisosOBJ;
           this.createPermissionControls();
         } else {
-          console.log('ERROR');
+          console.error('ERROR: obtaining response response.component.ts');
         }
       },
       error: (error) => {
@@ -359,7 +359,7 @@ export class RolesComponent implements  OnInit,AfterViewInit {
         if (this.form.invalid && this.form.value.id != 0) return;
         this.rolesService.UpdateRol(crytpUpdate).subscribe({
           next: (data) => {
-            console.log(data);
+            //console.log(data);
             if (data.response) {
               this.openSnackBar(this.language.alert_valid_update_roles);
               this.loadRoles();
