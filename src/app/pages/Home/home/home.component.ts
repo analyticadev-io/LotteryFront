@@ -20,6 +20,19 @@ import { AccesoService } from '../../../services/Acceso/acceso.service';
 import { SorteosComponent } from '../../Sorteos/sorteos/sorteos.component';
 import { EncryptService } from '../../../services/Encrypt/encrypt.service';
 
+import { BoletosComponent } from '../../Boletos/boletos/boletos.component';
+
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { BoletoService } from '../../../services/Boleto/boleto.service';
+import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
+import { Boleto } from '../../../interfaces/Boleto';
+
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzCardModule } from 'ng-zorro-antd/card';
+
+
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -33,7 +46,12 @@ import { EncryptService } from '../../../services/Encrypt/encrypt.service';
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
-    SorteosComponent
+    SorteosComponent,
+    BoletosComponent,
+    NzBadgeModule,
+    NzIconModule,
+    NzModalModule,
+    NzCardModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -42,6 +60,7 @@ export class HomeComponent {
   activeComponent$ = this.menuService.activeComponent$;
   menuItems$ = this.menuService.menuItems$;
   public language = language;
+  boleto: Boleto[] = [];
 
   encryptedToken = this.cookieService.get('userinfo');
   public currentUser: Usuario = {} as Usuario;
@@ -49,11 +68,14 @@ export class HomeComponent {
     private menuService: MenuOptionsService,
     private cookieService: CookieService,
     private accesoService:AccesoService,
-    private __encryptService:EncryptService
+    private __encryptService:EncryptService,
+    private _boletoService:BoletoService
   ) {}
 
   ngOnInit(): void {
+
     this.decryptUserInfo(this.encryptedToken);
+    this.obtainTickets();
   }
 
   decryptUserInfo(userCookie: string) {
@@ -66,9 +88,61 @@ export class HomeComponent {
     }
   }
 
+  obtainTickets(){
+
+    var userId = this.currentUser.UsuarioId ?? "";
+    var idString:string = userId?.toString();
+    var encryptedId= this.__encryptService.encrypt(idString);
+
+    var encRequest:EncryptedResponse={
+      response:encryptedId
+    }
+
+    console.log(this.currentUser);
+    this._boletoService.GetUserTickets(encRequest.response).subscribe({
+      next:(data)=>{
+        if(data.response){
+          var decryptResponse = this.__encryptService.decrypt(data.response);
+          this.boleto = JSON.parse(decryptResponse) as Boleto[];
+          console.log(this.boleto);
+
+
+
+        }
+      },error:(error)=>{
+
+      }
+    });
+
+
+  }
+
   onLogOut() {
     this.accesoService.LogOut();
   }
 
+  count(boleto: Boleto[]): number {
+    return boleto ? boleto.length : 0; // Maneja el caso cuando boleto sea undefined
+  }
+
+  /**
+   * Modal
+   */
+
+  isVisible = false;
+
+  showModal(): void {
+    this.isVisible = true;
+  }
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+  }
 
 }

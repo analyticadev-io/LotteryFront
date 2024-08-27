@@ -9,7 +9,11 @@
       </div>
       <div nz-col nzSpan="6">
         <!-- Replace with actual content or remove -->
-        <p>Placeholder Content</p>
+        <nz-badge [nzCount]="count(this.boleto)" (click)="showModal()">
+          <span nz-icon nzType="file" nzTheme="outline" style="color: white;">Tickets</span>
+        </nz-badge>
+
+
       </div>
       <div nz-col nzSpan="6">
 
@@ -44,9 +48,51 @@
         ></app-sorteos>
       </div>
 
+      <div *ngIf="activeComponent$ | async as activeComponent">
+        <app-boletos
+          *ngIf="activeComponent === language.menu_option_module_name_Boletos"
+        ></app-boletos>
+      </div>
+
   </nz-content>
   <nz-footer>
     <!-- Customize footer content -->
     Footer
   </nz-footer>
 </nz-layout>
+
+<!--
+<nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+
+    <div *ngFor="let bol of boleto; let i = index">
+      <div style="margin: 1px 1px 1px 1px;">
+      <div *ngFor="let num of bol.NumerosBoletos">
+        <p>Fecha Sorteo: {{ bol.Sorteo?.Title }}</p>
+        <p>Fecha Sorteo: {{ bol.Sorteo?.FechaSorteo }}</p>
+        <p>Numero de boleto: {{ num.Numero }}</p>
+      </div>
+    </div>
+
+    </div>
+  </ng-container>
+</nz-modal> -->
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Detalles de los Boletos" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+    <div *ngFor="let bol of boleto; let i = index" class="boleto-container">
+      <h3>Boleto {{ i + 1 }}</h3>
+      <p><strong>Fecha de Sorteo:</strong> {{ bol.Sorteo?.FechaSorteo | date:'short' }}</p>
+      <p><strong>Nombre del Sorteo:</strong> {{ bol.Sorteo?.Title }}</p>
+      <p><strong>Fecha de Compra:</strong> {{ bol.FechaCompra | date:'short ' }}</p>
+      <div class="numeros-container">
+        <h4>Números del Boleto:</h4>
+        <ul>
+          <li *ngFor="let num of bol.NumerosBoletos">
+            Número: {{ num.Numero }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
