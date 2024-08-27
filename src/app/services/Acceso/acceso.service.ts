@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../../settings/appsettings';
 import { Usuario } from '../../interfaces/Usuario';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ResponseAcceso } from '../../interfaces/ResponseAcceso';
 import { Login } from '../../interfaces/Login';
 import { CookieService } from 'ngx-cookie-service';
@@ -17,8 +17,11 @@ import { EncryptedResponse } from '../../interfaces/EncryptedResponse';
 })
 export class AccesoService {
 
-  private http = inject(HttpClient)
-  private baseUrl:string = environment.apiUrl
+  private http = inject(HttpClient);
+  private baseUrl:string = environment.apiUrl;
+
+  private user: Usuario | null = null;
+
   constructor(private cookieService:CookieService, private router: Router,
   private _encrypt:EncryptService) { }
 
@@ -36,5 +39,28 @@ export class AccesoService {
     this.router.navigate(['']);
 
   }
+
+  ObtainDecryptedInfo(): Observable<Usuario | null> {
+    const userCrypted = this.cookieService.get('userinfo');
+    if (userCrypted) {
+      try {
+        const decryptedUser = this._encrypt.decrypt(userCrypted);
+        const objUser = JSON.parse(decryptedUser) as Usuario;
+        this.user = objUser;
+        return of(this.user);
+      } catch (error) {
+        console.error('Error decrypting user info:', error);
+        return of(null);
+      }
+    }
+    return of(null);
+  }
+
+  getCurrentUser(): Usuario | null {
+    return this.user;
+  }
+
+
+
 
 }
