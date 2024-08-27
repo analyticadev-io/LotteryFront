@@ -48,7 +48,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzCardModule } from 'ng-zorro-antd/card';
-
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 //Components
 import { HomeComponent } from './pages/Home/home/home.component';
@@ -58,6 +59,8 @@ import { DrawerComponent } from './components/Drawer/drawer/drawer.component';
 import { RolesComponent } from './pages/Roles/roles/roles.component';
 import { ModulesComponent } from './pages/Modules/modules/modules.component';
 import { SorteosComponent } from './pages/Sorteos/sorteos/sorteos.component';
+import { BoletosComponent } from './pages/Boletos/boletos/boletos.component';
+
 
 //NGX cookie service
 import {CookieService} from 'ngx-cookie-service';
@@ -99,7 +102,14 @@ registerLocaleData(en);
 
 
     //NGZORRO
-    NzDrawerModule,NzIconModule,NzButtonModule,NzGridModule,NzModalModule,
+    NzDrawerModule,
+    NzIconModule,
+    NzButtonModule,
+    NzGridModule,
+    NzModalModule,
+    NzCardModule,
+    NzSpinModule,
+    NzBadgeModule,
 
     //componentes
     HomeComponent,
@@ -109,7 +119,8 @@ registerLocaleData(en);
     RolesComponent,
     ModulesComponent,
     SorteosComponent,
-    NzCardModule,
+    BoletosComponent,
+
 
     //Directives
     askForPermission,
