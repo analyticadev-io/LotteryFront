@@ -72,7 +72,7 @@ export class RegistroComponent {
     };
     this.AccesoService.Registro(object).subscribe({
       next: (data) => {
-        if (data.usuarioId) {
+        if (data.UsuarioId) {
           alert(language.alert_valid_registro);
           this.openSnackBar(this.language.alert_valid_registro);
           this.Inicio();
