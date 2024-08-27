@@ -19,3 +19,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .input-custom {
     width: 100%;
   }
+
+
+
+  /* Para navegadores WebKit (Chrome, Safari, Opera GX) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Para Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Para Edge */
+input[type="number"] {
+  -ms-appearance: none;
+}

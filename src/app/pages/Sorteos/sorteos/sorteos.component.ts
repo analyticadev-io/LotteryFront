@@ -29,6 +29,8 @@ import moment from 'moment-timezone';
 import { EncryptService } from '../../../services/Encrypt/encrypt.service';
 import { Sorteo } from '../../../interfaces/Sorteo';
 import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
+import { FloatLabelModule } from 'primeng/floatlabel';
+
 
 @Component({
   selector: 'app-sorteos',
@@ -47,6 +49,7 @@ import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
     MatDatepickerModule,
     ReactiveFormsModule,
     CalendarModule,
+    FloatLabelModule,
   ],
   templateUrl: './sorteos.component.html',
   styleUrl: './sorteos.component.css',
@@ -62,6 +65,7 @@ export class SorteosComponent implements OnInit {
     'sorteoId',
     'fechaSorteo',
     'descripcion',
+    'title',
     'status',
     'boletos',
     'numerosSorteos',
@@ -89,6 +93,7 @@ export class SorteosComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       sorteoId: [''],
+      title: ['', Validators.required],
       descripcion: ['', Validators.required],
       fechaSorteo: [null, Validators.required],
     });
@@ -107,7 +112,7 @@ export class SorteosComponent implements OnInit {
           var objSorteos = JSON.parse(encryptedResponse) as ResponseSorteo[];
           this.dataSource.data = objSorteos;
           this.loading = false;
-          console.log(encryptedResponse);
+          //console.log(encryptedResponse);
           console.log(objSorteos);
         } else {
         }
@@ -143,6 +148,7 @@ export class SorteosComponent implements OnInit {
         this.modalTitle = language.modal_edit_action_title_Sorteos;
         this.form.patchValue({
           sorteoId: model?.SorteoId,
+          title: model?.Title,
           descripcion: model?.Descripcion,
           fechaSorteo: dateObject,
         });
@@ -154,6 +160,7 @@ export class SorteosComponent implements OnInit {
         this.modalTitle = language.modal_delete_action_title_Sorteos;
         this.form.patchValue({
           sorteoId: model?.SorteoId,
+          title: model?.Title,
           descripcion: model?.Descripcion,
           fechaSorteo: dateObject,
         });
@@ -174,6 +181,7 @@ export class SorteosComponent implements OnInit {
       case appsettings.add_permission_text:
         if (this.form.invalid) return;
         let newSorteo: ResponseSorteo = {
+          Title: this.form.value.title,
           Descripcion: this.form.value.descripcion,
           FechaSorteo: fecha,
         };
@@ -189,6 +197,7 @@ export class SorteosComponent implements OnInit {
           next: (data) => {
             if(data.response){
               this.getSorteos();
+              this.form.reset();
             }else{
               console.error("ERROR: sorteos.component.ts  **ADD ACTION**");
             }
@@ -204,6 +213,7 @@ export class SorteosComponent implements OnInit {
         if (this.form.invalid && this.form.value.sorteoId != null) return;
         let editSorteo: ResponseSorteo = {
           SorteoId: this.form.value.sorteoId,
+          Title: this.form.value.title,
           Descripcion: this.form.value.descripcion,
           FechaSorteo: fecha,
         };
@@ -217,6 +227,7 @@ export class SorteosComponent implements OnInit {
           next: (data) => {
             if(data.response){
               this.getSorteos();
+              this.form.reset();
             }else{
               console.error("ERROR: sorteos.component.ts  **EDIT ACTION**");
             }
@@ -236,7 +247,7 @@ export class SorteosComponent implements OnInit {
           next: (data) => {
             if(data.response){
               this.getSorteos();
-
+              this.form.reset();
             }else{
               console.error("ERROR: sorteos.component.ts  **DELETE ACTION**");
             }

@@ -1,0 +1,111 @@
+<div style="background: #ececec; padding: 30px">
+  <div nz-row [nzGutter]="8">
+    @for (item of sorteos; track item.SorteoId) {
+
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="{{ item.Title }}">
+        <p>{{ item.Descripcion }}</p>
+        <p>
+          Fecha del sorteo :
+          {{ item.FechaSorteo | date : "MMM dd, yyyy 'at' hh:mm a" }}
+        </p>
+        <button nz-button nzType="primary" (click)="showModal(item)">
+          <span nz-icon nzType="dollar"></span>
+          Comprar
+        </button>
+      </nz-card>
+    </div>
+
+    }
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="{{ ticket?.Title }}"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
+>
+  <div *nzModalContent>
+    <h4>{{ ticket?.Descripcion }}</h4>
+    <p>Escribe el numero de tu boleto o genera uno aleatorio</p>
+
+    <div style="display: flex; flex-direction: row">
+      <form [formGroup]="ticketForm">
+        <mat-form-field class="example-form-field">
+          <input
+            matInput
+            type="number"
+            maxlength="99"
+            minlength="0"
+            (input)="onInput($event)"
+            formControlName="inputNum0"
+            [(ngModel)]="randomNumbers[0]"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="example-form-field">
+          <input
+            matInput
+            type="number"
+            maxlength="99"
+            minlength="00"
+            (input)="onInput($event)"
+            formControlName="inputNum1"
+            [(ngModel)]="randomNumbers[1]"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="example-form-field">
+          <input
+            matInput
+            type="number"
+            maxlength="99"
+            minlength="00"
+            (input)="onInput($event)"
+            formControlName="inputNum2"
+            [(ngModel)]="randomNumbers[2]"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="example-form-field">
+          <input
+            matInput
+            type="number"
+            maxlength="99"
+            minlength="00"
+            (input)="onInput($event)"
+            formControlName="inputNum3"
+            [(ngModel)]="randomNumbers[3]"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="example-form-field">
+          <input
+            matInput
+            type="number"
+            maxlength="99"
+            minlength="00"
+            (input)="onInput($event)"
+            formControlName="inputNum4"
+            [(ngModel)]="randomNumbers[4]"
+          />
+        </mat-form-field>
+
+      </form>
+    </div>
+
+    <button
+      [disabled]="itsDisabledRandomButton"
+      nz-button
+      nzType="primary"
+      (click)="generateAndDisplayRandomNumbers()"
+    >
+      <span nz-icon nzType="star"></span>
+      Random
+    </button>
+    <nz-spin [nzSpinning]="itGeneratingRandomNumbers" nzSimple></nz-spin>
+  </div>
+</nz-modal>
+
