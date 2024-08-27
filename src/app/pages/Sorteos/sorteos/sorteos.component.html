@@ -1,58 +1,87 @@
- <mat-card appearance="outlined">
+<mat-card appearance="outlined">
   <h3>{{ language.menu_option_name_Sorteos }}</h3>
   <mat-card-content>
-
     <mat-form-field>
       <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Ex. ium"
+        #input
+      />
     </mat-form-field>
 
     <div class="mat-elevation-z8">
-      <button nz-button nzType="primary" (click)="showModal(settings.add_permission_text)" *askForPermission="
-        settings.add_permission_text +
-        '_' +
-        language.menu_option_module_name_Sorteos
-      ">
+      <button
+        nz-button
+        nzType="primary"
+        (click)="showModal(settings.add_permission_text)"
+        *askForPermission="
+          settings.add_permission_text +
+          '_' +
+          language.menu_option_module_name_Sorteos
+        "
+      >
         <span nz-icon nzType="lock" nzTheme="outline"></span>
         {{ settings.add_permission_text }}
       </button>
 
       <table mat-table [dataSource]="dataSource" matSort>
-
         <ng-container matColumnDef="sorteoId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-          <td mat-cell *matCellDef="let element"> {{element.SorteoId}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
+          <td mat-cell *matCellDef="let element">{{ element.SorteoId }}</td>
         </ng-container>
 
         <ng-container matColumnDef="fechaSorteo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ language.table_column_name_date_Sorteos }} </th>
-          <td mat-cell *matCellDef="let element"> {{ getFormattedDate(element.FechaSorteo) }} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.table_column_name_date_Sorteos }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.FechaSorteo |  date:"MMM dd, yyyy 'at' hh:mm a" }}
+          </td>
+        </ng-container>
 
-
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.table_column_name_title_Sorteos }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.Title }} </td>
         </ng-container>
 
         <ng-container matColumnDef="descripcion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ language.table_column_name_description_Sorteos }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.table_column_name_description_Sorteos }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.Descripcion }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ language.table_column_name_status_Sorteos }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.table_column_name_status_Sorteos }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.Status }}</td>
         </ng-container>
 
         <ng-container matColumnDef="boletos">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ language.table_column_name_boletos_Sorteos }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.Boletos}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.table_column_name_boletos_Sorteos }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.Boletos }}</td>
         </ng-container>
 
         <ng-container matColumnDef="numerosSorteos">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ language.table_column_name_nums_Sorteos }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.NumerosSorteos}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.table_column_name_nums_Sorteos }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.NumerosSorteos }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ language.action_text }} </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ language.action_text }}
+          </th>
           <td mat-cell *matCellDef="let row">
             <ng-container
               *askForPermission="
@@ -61,7 +90,11 @@
                 language.menu_option_module_name_Sorteos
               "
             >
-              <button nz-button nzType="primary" (click)="showModal(settings.edit_permission_text,row)">
+              <button
+                nz-button
+                nzType="primary"
+                (click)="showModal(settings.edit_permission_text, row)"
+              >
                 <span nz-icon nzType="edit" nzTheme="outline"></span>
               </button>
             </ng-container>
@@ -73,7 +106,11 @@
                 language.menu_option_module_name_Sorteos
               "
             >
-              <button nz-button nzType="primary" (click)="showModal(settings.delete_permission_text,row)">
+              <button
+                nz-button
+                nzType="primary"
+                (click)="showModal(settings.delete_permission_text, row)"
+              >
                 <span nz-icon nzType="delete" nzTheme="outline"></span>
               </button>
             </ng-container>
@@ -81,93 +118,124 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="7">No data matching the filter "{{ input.value }}"</td>
+          <td class="mat-cell" colspan="7">
+            No data matching the filter "{{ input.value }}"
+          </td>
         </tr>
       </table>
-
-
     </div>
   </mat-card-content>
 </mat-card>
 
-
 <nz-modal
-[(nzVisible)]="isVisible"
-nzTitle="{{modalTitle}}"
-(nzOnCancel)="handleCancel()"
-(nzOnOk)="handleOk()"
-[nzOkLoading]="isOkLoading"
+  [(nzVisible)]="isVisible"
+  nzTitle="{{ modalTitle }}"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
 >
+  <form [formGroup]="form">
+    <p *nzModalContent>
+      @if (modalAction===settings.add_permission_text) {
 
-<form [formGroup]="form">
-<p *nzModalContent>
+      <input style="display: none" formControlName="sorteoId" matInput />
 
+      <br />
+      <mat-form-field>
+        <mat-label>Titulo</mat-label>
+        <input formControlName="title" matInput />
+      </mat-form-field>
+      <br />
 
+      <br />
+      <mat-form-field>
+        <mat-label>Descripcion</mat-label>
+        <textarea formControlName="descripcion" matInput></textarea>
+      </mat-form-field>
+      <br />
 
-  @if (modalAction===settings.add_permission_text) {
+      <p-floatLabel>
+        <p-calendar
+          id="primeCalendar"
+          formControlName="fechaSorteo"
+          [showTime]="true"
+          hourFormat="24"
+          dateFormat="yy-mm-dd"
+          timeFormat="HH:mm:ss"
+          [showButtonBar]="true"
+          readonlyInput="true"
+          [disabled]="true"
+        >
+        </p-calendar>
+        <label for="primeCalendar">Fecha del Sorteo</label>
+      </p-floatLabel>
 
+      }@else if (modalAction===settings.edit_permission_text) {
 
-      <input style="display: none;" formControlName="sorteoId" matInput>
+      <input style="display: none" formControlName="sorteoId" matInput />
+      <br />
+      <mat-form-field>
+        <mat-label>Titulo</mat-label>
+        <input formControlName="title" matInput />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>Descripcion</mat-label>
+        <textarea formControlName="descripcion" matInput></textarea>
+      </mat-form-field>
+      <br />
 
-    <br>
-    <mat-form-field>
-      <mat-label>descripcion</mat-label>
-      <input formControlName="descripcion" matInput>
-    </mat-form-field>
-    <br>
+      <p-floatLabel>
+        <p-calendar
+          id="primeCalendar"
+          formControlName="fechaSorteo"
+          [showTime]="true"
+          hourFormat="24"
+          dateFormat="yy-mm-dd"
+          timeFormat="HH:mm:ss"
+          [showButtonBar]="true"
+          readonlyInput="true"
+          [disabled]="true"
+        >
+        </p-calendar>
+        <label for="primeCalendar">Fecha del Sorteo</label>
+      </p-floatLabel>
 
-    <p-calendar formControlName="fechaSorteo"
-  [showTime]="true"
-  hourFormat="24"
-  dateFormat="yy-mm-dd"
-  timeFormat="HH:mm:ss"
-  [showButtonBar]="true"
-  [disabled]="false">
-</p-calendar>
+      }@else if (modalAction===settings.delete_permission_text) {
 
-  }@else if (modalAction===settings.edit_permission_text) {
+      <input style="display: none" formControlName="sorteoId" matInput />
 
-    <input style="display: none;" formControlName="sorteoId" matInput>
-    <br>
-    <mat-form-field>
-      <mat-label>descripcion</mat-label>
-      <input formControlName="descripcion" matInput>
-    </mat-form-field>
-    <br>
+      <br />
+      <mat-form-field>
+        <input formControlName="title" matInput />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>descripcion</mat-label>
+        <textarea readonly="true" formControlName="descripcion" matInput></textarea>
+      </mat-form-field>
+      <br />
 
-    <p-calendar formControlName="fechaSorteo"
-  [showTime]="true"
-  hourFormat="24"
-  dateFormat="yy-mm-dd"
-  timeFormat="HH:mm:ss"
-  [showButtonBar]="true"
-  [disabled]="false">
-</p-calendar>
-  }@else if (modalAction===settings.delete_permission_text) {
+      <p-floatLabel>
+        <p-calendar
+          id="primeCalendar"
+          formControlName="fechaSorteo"
+          [showTime]="true"
+          hourFormat="24"
+          dateFormat="yy-mm-dd"
+          timeFormat="HH:mm:ss"
+          [showButtonBar]="true"
+          readonlyInput="true"
+          [disabled]="true"
+        >
+        </p-calendar>
+        <label for="primeCalendar">Fecha del Sorteo</label>
+      </p-floatLabel>
 
-    <input style="display: none;" formControlName="sorteoId" matInput>
-    <br>
-    <mat-form-field>
-      <mat-label>descripcion</mat-label>
-      <input readonly="true" formControlName="descripcion" matInput>
-    </mat-form-field>
-    <br>
-
-    <p-calendar readonly="true" formControlName="fechaSorteo"
-  [showTime]="true"
-  hourFormat="24"
-  dateFormat="yy-mm-dd"
-  timeFormat="HH:mm:ss"
-  [showButtonBar]="true"
-  readonlyInput="true"
-  [disabled]="true">
-</p-calendar>
-  }
-
-
-</p>
-</form>
+      }
+    </p>
+  </form>
 </nz-modal>
