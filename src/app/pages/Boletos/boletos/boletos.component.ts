@@ -159,6 +159,9 @@ export class BoletosComponent {
           }
         },error:(error)=>{
           console.error(error);
+          const errorMessage = error.error?.error || "Ocurrió un error al comprar el boleto.";
+      this.openSnackBar(errorMessage, "OK");
+      this.isOkLoading = false;
         }
       });
 
