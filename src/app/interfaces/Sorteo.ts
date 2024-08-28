@@ -6,6 +6,7 @@ export interface Sorteo{
   FechaSorteo: string,
   Title:string,
   Descripcion:string,
-  NumerosSorteos?:NumerosSorteos,
+  NumerosSorteos?:NumerosSorteos[],
   Boletos?:Boleto
+  Status?:string
 }
