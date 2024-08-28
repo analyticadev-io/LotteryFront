@@ -1,6 +1,6 @@
 # Languages
-
-## [EN](#EN)
+- [ES](#es)
+- [EN](#en)
 
 # ES
 ## LotteryFornt.io
