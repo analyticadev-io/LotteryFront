@@ -6,6 +6,11 @@
 ## LotteryFornt.io
 Este proyecto es una aplicación de frontend desarrollada en Angular que gestiona un sistema de sorteos de lotería. El sistema incluye un robusto control de acceso basado en roles (RBAC) implementado a través de interceptores y directivas personalizadas, garantizando la seguridad y la correcta autorización de los usuarios en diferentes secciones de la aplicación.
 
+## Usuarios de Prueba
+### Manager
+usuario: manager1
+password: manager1
+
 ## Características Principales
 
 ### Generación de Sorteos
@@ -33,6 +38,11 @@ La seguridad de la comunicación entre el frontend y el backend está garantizad
 # EN
 ## LotteryFornt.io
 This project is a frontend application developed in Angular that manages a lottery draw system. The system includes a robust Role-Based Access Control (RBAC) implemented through interceptors and custom directives, ensuring the security and proper authorization of users in different sections of the application.
+
+## Usuarios de Prueba
+### Manager
+usuario: manager1
+password: manager1
 
 ## Main Features
 
