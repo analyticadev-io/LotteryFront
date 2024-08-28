@@ -1,27 +1,27 @@
-# LotteryFront
+# LotteryFornt.io
+Este proyecto es una aplicación de frontend desarrollada en Angular que gestiona un sistema de sorteos de lotería. El sistema incluye un robusto control de acceso basado en roles (RBAC) implementado a través de interceptores y directivas personalizadas, garantizando la seguridad y la correcta autorización de los usuarios en diferentes secciones de la aplicación.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
+## Características Principales:
 
-## Development server
+### Generación de Sorteos: 
+Los usuarios con los permisos adecuados pueden crear nuevos sorteos, configurando detalles como la fecha y las reglas del sorteo.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Venta de Tickets: 
+Los usuarios pueden comprar tickets para los sorteos disponibles. Cada ticket está vinculado a un usuario específico, lo que permite un seguimiento detallado de las participaciones.
 
-## Code scaffolding
+### Generación de Números de Ticket: 
+Los números en los boletos pueden ser generados automáticamente o ingresados manualmente por el usuario, proporcionando flexibilidad y personalización en la compra de tickets.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Generación de Número Ganador: 
+El número ganador se determina aleatoriamente en cada sorteo, asegurando un proceso justo y transparente.
 
-## Build
+### Control de Acceso y Autorización: 
+La aplicación utiliza interceptores para gestionar la autorización y asegurar que los usuarios solo puedan acceder a las funcionalidades para las que tienen permiso. Además, las directivas personalizadas facilitan la gestión del acceso basado en roles en la interfaz de usuario.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Cifrado Sincrónico Bidireccional: 
+La seguridad de la comunicación entre el frontend y el backend está garantizada mediante cifrado sincrónico bidireccional. El frontend encripta las solicitudes antes de enviarlas al backend, que las desencripta, procesa y luego cifra las respuestas. El frontend descifra las respuestas para presentarlas al usuario, asegurando la protección de los datos en tránsito.
 
-## Running unit tests
+## Authors
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- [@Devil-bit123](https://github.com/Devil-bit123)
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
