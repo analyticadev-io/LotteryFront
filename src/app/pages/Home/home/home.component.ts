@@ -89,7 +89,7 @@ export class HomeComponent {
     private _boletoService:BoletoService
   ) {
 
-    console.log(this.boleto$);
+    //console.log(this.boleto$);
 
   }
 
@@ -110,8 +110,8 @@ export class HomeComponent {
     this.activeTickets$.subscribe(tickets => this.activeTicketsCount = tickets.length);
     this.completeTickets$.subscribe(tickets => this.completeTicketsCount = tickets.length);
 
-    console.log('activos: ',this.activeTickets$);
-    console.log('completos: ', this.completeTickets$);
+    //console.log('activos: ',this.activeTickets$);
+    //console.log('completos: ', this.completeTickets$);
 
   }
 
@@ -176,12 +176,12 @@ export class HomeComponent {
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
+    //console.log('Button ok clicked!');
     this.isVisible = false;
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
+    //console.log('Button cancel clicked!');
     this.isVisible = false;
   }
 

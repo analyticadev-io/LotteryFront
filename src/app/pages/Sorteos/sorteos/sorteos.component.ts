@@ -114,7 +114,7 @@ export class SorteosComponent implements OnInit {
           this.dataSource.data = objSorteos;
           this.loading = false;
           //console.log(encryptedResponse);
-          console.log(objSorteos);
+          //console.log(objSorteos);
         } else {
         }
 
@@ -293,7 +293,7 @@ export class SorteosComponent implements OnInit {
 
   onRefreshSorteos() {
     this.getSorteos();
-    console.log('se emitio el eveto');
+    //console.log('se emitio el eveto');
   }
 
 }

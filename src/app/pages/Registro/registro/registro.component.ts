@@ -72,20 +72,20 @@ export class RegistroComponent {
     };
     this.AccesoService.Registro(object).subscribe({
       next: (data) => {
-        console.log(data);
+        //console.log(data);
         if (data.nombreUsuario) {
           //alert(language.alert_valid_registro);
           this.openSnackBar(this.language.alert_valid_registro);
           this.Inicio();
-          console.log('entre al if');
+          //console.log('entre al if');
         } else {
-          console.log('entre al else');
+          //console.log('entre al else');
           this.openSnackBar(this.language.alert_invalid_registro);
         }
       },
       error: (error) => {
         console.error(error);
-        console.log('entre al error');
+        //console.log('entre al error');
         this.openSnackBar(this.language.alert_invalid_registro);
       },
     });

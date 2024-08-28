@@ -91,7 +91,7 @@ export class BoletosComponent {
           var encryptedResponse = this._encriptService.decrypt(data.response);
           var objSorteos = JSON.parse(encryptedResponse) as ResponseSorteo[];
           this.sorteos = objSorteos.filter(sorteo => sorteo.Status=='active');
-          console.log(this.sorteos);
+          //console.log(this.sorteos);
         } else {
           console.error('ERROR: bolrtos.component.ts');
         }
@@ -106,7 +106,7 @@ export class BoletosComponent {
     this._accesoService.ObtainDecryptedInfo().subscribe(user => {
       this.currentUser = user;
       // Aquí puedes agregar lógica adicional si es necesario
-      console.log('Current User:', this.currentUser);
+      //console.log('Current User:', this.currentUser);
     });
   }
 
@@ -158,7 +158,7 @@ export class BoletosComponent {
       this._boletoService.AddBoleto(enc).subscribe({
         next:(data)=>{
           if(data.response){
-            console.log(data.response);
+            //console.log(data.response);
             this.isOkLoading = false;
             this.isVisible = false;
             this.openSnackBar("Tu boleto se a comprado con exito","OK");
