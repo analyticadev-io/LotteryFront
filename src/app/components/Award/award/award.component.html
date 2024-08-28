@@ -1,0 +1,86 @@
+
+<nz-card style="width:300px;" nzTitle="{{Title}}">
+    <p>{{Description}}</p>
+    <button   nz-popconfirm
+    nzPopconfirmTitle="Desea realizar el sorteo?"
+    nzPopconfirmPlacement="bottom"
+    (nzOnConfirm)="confirm()"
+    (nzOnCancel)="cancel()" nz-button nzType="primary"
+    [disabled]="blockAwardButton"
+    >Award</button>
+
+    <ng-container *ngIf="awardVisibility">
+      <form [formGroup]="ticketForm">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <mat-form-field class="example-form-field">
+            <input
+              matInput
+              type="number"
+              maxlength="99"
+              minlength="0"
+              (input)="onInput($event)"
+              formControlName="inputNum0"
+              [disabled]="DisableInputs"
+              [readonly]="'DisableInputs'"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="example-form-field">
+            <input
+              matInput
+              type="number"
+              maxlength="99"
+              minlength="00"
+              (input)="onInput($event)"
+              formControlName="inputNum1"
+              [disabled]="DisableInputs"
+              [readonly]="'DisableInputs'"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="example-form-field">
+            <input
+              matInput
+              type="number"
+              maxlength="99"
+              minlength="00"
+              (input)="onInput($event)"
+              formControlName="inputNum2"
+              [disabled]="DisableInputs"
+              [readonly]="'DisableInputs'"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="example-form-field">
+            <input
+              matInput
+              type="number"
+              maxlength="99"
+              minlength="00"
+              (input)="onInput($event)"
+              formControlName="inputNum3"
+              [disabled]="DisableInputs"
+              [readonly]="'DisableInputs'"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="example-form-field">
+            <input
+              matInput
+              type="number"
+              maxlength="99"
+              minlength="00"
+              (input)="onInput($event)"
+              formControlName="inputNum4"
+              [disabled]="DisableInputs"
+              [readonly]="'DisableInputs'"
+            />
+          </mat-form-field>
+        </div>
+      </form>
+    </ng-container>
+
+
+
+
+</nz-card>
