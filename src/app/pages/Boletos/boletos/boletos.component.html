@@ -1,24 +1,30 @@
 <div style="background: #ececec; padding: 30px">
-  <div nz-row [nzGutter]="8">
-    @for (item of sorteos; track item.SorteoId) {
-
-    <div nz-col [nzSpan]="8">
-      <nz-card nzTitle="{{ item.Title }}">
-        <p>{{ item.Descripcion }}</p>
-        <p>
-          Fecha del sorteo :
-          {{ item.FechaSorteo | date : "MMM dd, yyyy 'at' hh:mm a" }}
-        </p>
-        <button nz-button nzType="primary" (click)="showModal(item)">
-          <span nz-icon nzType="dollar"></span>
-          Comprar
-        </button>
-      </nz-card>
-    </div>
-
-    }
+  <div nz-row [nzGutter]="8" style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <!-- Usar ng-container para mostrar los sorteos o el mensaje de vacío -->
+    <ng-container *ngIf="sorteos && sorteos.length > 0; else noSorteos">
+      <ng-container *ngFor="let item of sorteos;">
+        <div nz-col [nzSpan]="8" style="margin-bottom: 16px;">
+          <nz-card nzTitle="{{ item.Title }}">
+            <p>{{ item.Descripcion }}</p>
+            <p>
+              Fecha del sorteo :
+              {{ item.FechaSorteo | date : "MMM dd, yyyy 'at' hh:mm a" }}
+            </p>
+            <button nz-button nzType="primary" (click)="showModal(item)">
+              <span nz-icon nzType="dollar"></span>
+              Comprar
+            </button>
+          </nz-card>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #noSorteos>
+      <nz-empty></nz-empty>
+    </ng-template>
   </div>
 </div>
+
+
 
 <nz-modal
   [(nzVisible)]="isVisible"
