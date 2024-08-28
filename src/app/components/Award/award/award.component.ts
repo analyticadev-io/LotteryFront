@@ -1,5 +1,5 @@
 import { NumerosSorteos } from './../../../interfaces/NumerosSorteos';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { MatInputModule } from '@angular/material/input';
@@ -56,6 +56,7 @@ export class AwardComponent {
   @Input() Description: string = '';
   @Input() DisableInputs: boolean = false;
   @Input() sorteo!: ResponseSorteo;
+  @Output() refreshSorteos = new EventEmitter<void>();
 
   /**
    *
@@ -167,7 +168,7 @@ export class AwardComponent {
     this._sorteoService.WinSorteo(enc).subscribe({
       next:(data)=>{
         if(data.response){
-
+          this.refreshSorteos.emit();
         }else{
           console.error('ERROR: award.componenet.ts');
         }

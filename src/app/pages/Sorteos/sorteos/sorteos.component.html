@@ -253,7 +253,7 @@
       </p-floatLabel>
 
       }@else if (modalAction===settings.award_permission_text) {
-        <app-award title="{{modalTitle}}" [DisableInputs]=true [sorteo]="selectedSorteo" ></app-award>
+        <app-award title="{{modalTitle}}" [DisableInputs]=true [sorteo]="selectedSorteo" (refreshSorteos)="onRefreshSorteos()"></app-award>
       }
 
     </p>
