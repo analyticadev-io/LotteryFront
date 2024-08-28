@@ -15,7 +15,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
 import {
   FormBuilder,
   FormGroup,
@@ -30,7 +29,7 @@ import { EncryptService } from '../../../services/Encrypt/encrypt.service';
 import { Sorteo } from '../../../interfaces/Sorteo';
 import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
 import { FloatLabelModule } from 'primeng/floatlabel';
-
+import { AwardComponent } from '../../../components/Award/award/award.component';
 
 @Component({
   selector: 'app-sorteos',
@@ -50,6 +49,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     ReactiveFormsModule,
     CalendarModule,
     FloatLabelModule,
+    AwardComponent,
   ],
   templateUrl: './sorteos.component.html',
   styleUrl: './sorteos.component.css',
@@ -81,7 +81,8 @@ export class SorteosComponent implements OnInit {
   modalAction = '';
 
   form: FormGroup;
-  isDisabled = true; // o true dependiendo de la lógica
+  isDisabled = true;
+  selectedSorteo: ResponseSorteo = {} as ResponseSorteo;
 
   /**
    *
@@ -165,6 +166,18 @@ export class SorteosComponent implements OnInit {
           fechaSorteo: dateObject,
         });
         break;
+
+        case appsettings.award_permission_text:
+
+          if(model){
+            this.modalAction = action;
+            this.modalTitle = model?.Title ?? '';
+            this.selectedSorteo = model;
+            //console.log(this.selectedSorteo);
+          }else{
+            return;
+          }
+          break;
 
       default:
         this.isVisible = false;

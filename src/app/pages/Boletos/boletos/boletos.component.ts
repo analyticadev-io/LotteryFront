@@ -26,6 +26,9 @@ import { Usuario } from '../../../interfaces/Usuario';
 import moment from 'moment';
 import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
 
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-boletos',
   standalone: true,
@@ -43,7 +46,8 @@ import { EncryptedResponse } from '../../../interfaces/EncryptedResponse';
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
-
+    NzEmptyModule,
+    CommonModule,
 
   ],
   templateUrl: './boletos.component.html',
@@ -86,7 +90,7 @@ export class BoletosComponent {
         if (data.response) {
           var encryptedResponse = this._encriptService.decrypt(data.response);
           var objSorteos = JSON.parse(encryptedResponse) as ResponseSorteo[];
-          this.sorteos = objSorteos;
+          this.sorteos = objSorteos.filter(sorteo => sorteo.Status=='active');
           console.log(this.sorteos);
         } else {
           console.error('ERROR: bolrtos.component.ts');
@@ -129,6 +133,8 @@ export class BoletosComponent {
         this.isOkLoading = false;
       }
       const ticketNumber: string = this.randomNumbers.join('');
+      var idString:string = this.currentUser?.UsuarioId?.toString() ?? '';
+      var encryptedUserId = this._encriptService.encrypt(idString);
       //console.log(this.ticketForm);
       //console.log(this.currentUser);
       //console.log(this.ticket);
@@ -156,6 +162,7 @@ export class BoletosComponent {
             this.isOkLoading = false;
             this.isVisible = false;
             this.openSnackBar("Tu boleto se a comprado con exito","OK");
+            this._boletoService.GetUserTickets(encryptedUserId).subscribe();
           }
         },error:(error)=>{
           console.error(error);

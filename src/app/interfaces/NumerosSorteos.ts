@@ -1,7 +1,7 @@
 import { Sorteo } from "./Sorteo";
 
 export interface NumerosSorteos{
-  NumeroSorteoID:number,
+  NumeroSorteoID?:number,
   SorteoID:number,
   Numero:number,
   Sorteo?:Sorteo

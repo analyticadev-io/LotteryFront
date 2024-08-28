@@ -1,24 +1,33 @@
  <nz-layout>
+
   <nz-header>
-    <div nz-row>
+    <div nz-row style="align-items: center;">
       <div nz-col nzSpan="6">
         <app-drawer></app-drawer>
       </div>
-      <div nz-col nzSpan="6">
+      <div nz-col nzSpan="6" style="display: flex; align-items: center; justify-content: center;">
         <h3 style="color: white;">{{language.hello_message}} {{currentUser.Nombre}}</h3>
       </div>
-      <div nz-col nzSpan="6">
-        <!-- Replace with actual content or remove -->
-        <nz-badge [nzCount]="count(this.boleto)" (click)="showModal()">
-          <span nz-icon nzType="file" nzTheme="outline" style="color: white;">Tickets</span>
-        </nz-badge>
+      <div nz-col nzSpan="6" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
 
+
+        <button nz-button nzType="text" (click)="showModal('active')">
+          <nz-badge [nzCount]="(activeTickets$ | async)?.length">
+            <span nz-icon nzType="smile" nzTheme="outline" style="color: white;">Por sortear</span>
+          </nz-badge>
+        </button>
+
+        <button nz-button nzType="text" (click)="showModal('complete')">
+        <nz-badge [nzCount]="(completeTickets$ | async)?.length">
+          <span nz-icon nzType="meh" nzTheme="outline" style="color: white;">Sorteados</span>
+        </nz-badge>
+      </button>
 
       </div>
-      <div nz-col nzSpan="6">
 
+      <div nz-col nzSpan="6" style="display: flex; align-items: center; justify-content: center;">
 
-          <div class="example-button-container">
+          <div class="example-button-container" >
             <button mat-fab extended (click)="onLogOut()">
               <mat-icon>logout</mat-icon>
               Log out
@@ -28,6 +37,8 @@
       </div>
     </div>
   </nz-header>
+
+
   <nz-content>
 
       <div *ngIf="activeComponent$ | async as activeComponent">
@@ -61,38 +72,59 @@
   </nz-footer>
 </nz-layout>
 
-<!--
-<nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="{{modalTitle}}" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
   <ng-container *nzModalContent>
 
-    <div *ngFor="let bol of boleto; let i = index">
-      <div style="margin: 1px 1px 1px 1px;">
-      <div *ngFor="let num of bol.NumerosBoletos">
-        <p>Fecha Sorteo: {{ bol.Sorteo?.Title }}</p>
-        <p>Fecha Sorteo: {{ bol.Sorteo?.FechaSorteo }}</p>
-        <p>Numero de boleto: {{ num.Numero }}</p>
-      </div>
-    </div>
+    @if (modalAction=="active") {
 
-    </div>
-  </ng-container>
-</nz-modal> -->
-
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Detalles de los Boletos" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-  <ng-container *nzModalContent>
-    <div *ngFor="let bol of boleto; let i = index" class="boleto-container">
-      <h3>Boleto {{ i + 1 }}</h3>
-      <p><strong>Fecha de Sorteo:</strong> {{ bol.Sorteo?.FechaSorteo | date:'short' }}</p>
-      <p><strong>Nombre del Sorteo:</strong> {{ bol.Sorteo?.Title }}</p>
-      <p><strong>Fecha de Compra:</strong> {{ bol.FechaCompra | date:'short ' }}</p>
-      <div class="numeros-container">
-        <h4>Números del Boleto:</h4>
-        <ul>
-          <li *ngFor="let num of bol.NumerosBoletos">
-            Número: {{ num.Numero }}
-          </li>
-        </ul>
+      <div *ngFor="let bol of activeTickets$|async; let i = index" class="boleto-container">
+        <h3>Boleto {{ i + 1 }}</h3>
+        <p><strong>Fecha de Sorteo:</strong> {{ bol.Sorteo?.FechaSorteo | date:'short' }}</p>
+        <p><strong>Nombre del Sorteo:</strong> {{ bol.Sorteo?.Title }}</p>
+        <p><strong>Fecha de Compra:</strong> {{ bol.FechaCompra | date:'short' }}</p>
+        <div class="numeros-container">
+          <h4>Números del Boleto:</h4>
+          <ul>
+            <li *ngFor="let num of bol.NumerosBoletos">
+              Número: {{ num.Numero }}
+            </li>
+          </ul>
+        </div>
+        <hr>
       </div>
-    </div>
+
+    }@else if(modalAction=="complete"){
+
+      <div *ngFor="let bol of completeTickets$|async; let i = index" class="boleto-container">
+        <h3>Boleto {{ i + 1 }}</h3>
+        <p><strong>Fecha de Sorteo:</strong> {{ bol.Sorteo?.FechaSorteo | date:'short' }}</p>
+        <p><strong>Nombre del Sorteo:</strong> {{ bol.Sorteo?.Title }}</p>
+        <p><strong>Fecha de Compra:</strong> {{ bol.FechaCompra | date:'short' }}</p>
+        <div class="numeros-container">
+          <h4>Números del Boleto:</h4>
+          <ul>
+              <li *ngFor="let num of bol.NumerosBoletos">
+              Número: {{ num.Numero }}
+              <span *ngIf="isWinningNumber(num.Numero, bol.Sorteo?.NumerosSorteos)">
+                - Ganador
+              </span>
+              <span *ngIf="!isWinningNumber(num.Numero, bol.Sorteo?.NumerosSorteos)">
+                - No Ganador, boleto premiado
+                @for (item of bol.Sorteo?.NumerosSorteos; track $index) {
+                  <strong>{{item.Numero}}</strong>
+                }
+              </span>
+            </li>
+          </ul>
+        </div>
+        <hr>
+      </div>
+
+    }
+
+
+
+
   </ng-container>
 </nz-modal>

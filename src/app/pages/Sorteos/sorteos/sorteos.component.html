@@ -74,7 +74,9 @@
             {{ language.table_column_name_nums_Sorteos }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.NumerosSorteos }}
+            @for (item of element.NumerosSorteos; track $index) {
+              {{item.Numero}}
+            }
           </td>
         </ng-container>
 
@@ -114,6 +116,21 @@
                 <span nz-icon nzType="delete" nzTheme="outline"></span>
               </button>
             </ng-container>
+
+            <ng-container          *askForPermission="
+            settings.award_permission_text +
+            '_' +
+            language.menu_option_module_name_Sorteos
+          ">
+            <button
+              nz-button
+              nzType="primary"
+              (click)="showModal(settings.award_permission_text, row)"
+            >
+              <span nz-icon nzType="question" nzTheme="outline"></span>
+            </button>
+          </ng-container>
+
           </td>
         </ng-container>
 
@@ -235,7 +252,10 @@
         <label for="primeCalendar">Fecha del Sorteo</label>
       </p-floatLabel>
 
+      }@else if (modalAction===settings.award_permission_text) {
+        <app-award title="{{modalTitle}}" [DisableInputs]=true [sorteo]="selectedSorteo" ></app-award>
       }
+
     </p>
   </form>
 </nz-modal>

@@ -35,4 +35,8 @@ export class SorteoService {
     return this.http.delete<EncryptedResponse>(`${this.baseUrl}Sorteos/${id}`)
   }
 
+  WinSorteo(sorteo:EncryptedResponse): Observable<EncryptedResponse>{
+    return this.http.put<EncryptedResponse>(`${this.baseUrl}Sorteos/win`,sorteo)
+  }
+
 }

@@ -60,7 +60,7 @@ import { RolesComponent } from './pages/Roles/roles/roles.component';
 import { ModulesComponent } from './pages/Modules/modules/modules.component';
 import { SorteosComponent } from './pages/Sorteos/sorteos/sorteos.component';
 import { BoletosComponent } from './pages/Boletos/boletos/boletos.component';
-
+import { AwardComponent } from './components/Award/award/award.component';
 
 //NGX cookie service
 import {CookieService} from 'ngx-cookie-service';
@@ -120,7 +120,7 @@ registerLocaleData(en);
     ModulesComponent,
     SorteosComponent,
     BoletosComponent,
-
+    AwardComponent,
 
     //Directives
     askForPermission,

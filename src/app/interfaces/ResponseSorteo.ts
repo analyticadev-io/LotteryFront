@@ -1,9 +1,12 @@
+import { Boleto } from "./Boleto";
+import { NumerosSorteos } from "./NumerosSorteos";
+
 export interface ResponseSorteo{
   SorteoId?: number,
   FechaSorteo?: string,
   Title?:string,
   Descripcion?:string,
-  status?:string,
-  Boletos?: any[],
-  NumerosSorteos?: any[]
+  Status?:string,
+  Boletos?: Boleto[],
+  NumerosSorteos?: NumerosSorteos[]
 }

@@ -30,7 +30,9 @@ import { Boleto } from '../../../interfaces/Boleto';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { map, Observable, of } from 'rxjs';
 
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 
 @Component({
@@ -52,6 +54,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     NzIconModule,
     NzModalModule,
     NzCardModule,
+    NzButtonModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -60,7 +63,21 @@ export class HomeComponent {
   activeComponent$ = this.menuService.activeComponent$;
   menuItems$ = this.menuService.menuItems$;
   public language = language;
-  boleto: Boleto[] = [];
+  //boleto: Boleto[] = [];
+
+
+  modalAction:string="";
+  modalTitle:string="";
+
+  boleto$: Observable<Boleto[]> = this._boletoService.tickets$;
+
+
+  activeTicketsCount: number = 0;
+  completeTicketsCount: number = 0;
+
+  activeTickets$: Observable<Boleto[]> = of([]);
+  completeTickets$: Observable<Boleto[]> = of([]);
+
 
   encryptedToken = this.cookieService.get('userinfo');
   public currentUser: Usuario = {} as Usuario;
@@ -70,12 +87,32 @@ export class HomeComponent {
     private accesoService:AccesoService,
     private __encryptService:EncryptService,
     private _boletoService:BoletoService
-  ) {}
+  ) {
+
+    console.log(this.boleto$);
+
+  }
 
   ngOnInit(): void {
 
     this.decryptUserInfo(this.encryptedToken);
-    this.obtainTickets();
+    this.loadTickets();
+
+    this.activeTickets$ = this.boleto$.pipe(
+      map(boletos => boletos.filter(boleto => boleto.Sorteo?.Status === 'active'))
+    );
+
+    this.completeTickets$ = this.boleto$.pipe(
+      map(boletos => boletos.filter(boleto => boleto.Sorteo?.Status === 'complete'))
+    );
+
+    // Suscribirse a los observables para actualizar los contadores
+    this.activeTickets$.subscribe(tickets => this.activeTicketsCount = tickets.length);
+    this.completeTickets$.subscribe(tickets => this.completeTicketsCount = tickets.length);
+
+    console.log('activos: ',this.activeTickets$);
+    console.log('completos: ', this.completeTickets$);
+
   }
 
   decryptUserInfo(userCookie: string) {
@@ -88,34 +125,21 @@ export class HomeComponent {
     }
   }
 
-  obtainTickets(){
+  loadTickets() {
+    const userId = this.currentUser.UsuarioId ?? '';
+    const encryptedId = this.__encryptService.encrypt(userId.toString());
 
-    var userId = this.currentUser.UsuarioId ?? "";
-    var idString:string = userId?.toString();
-    var encryptedId= this.__encryptService.encrypt(idString);
-
-    var encRequest:EncryptedResponse={
-      response:encryptedId
-    }
-
-    console.log(this.currentUser);
-    this._boletoService.GetUserTickets(encRequest.response).subscribe({
-      next:(data)=>{
-        if(data.response){
-          var decryptResponse = this.__encryptService.decrypt(data.response);
-          this.boleto = JSON.parse(decryptResponse) as Boleto[];
-          console.log(this.boleto);
-
-
-
-        }
-      },error:(error)=>{
-
+    // Obtener directamente la respuesta si lo necesitas
+    this._boletoService.GetUserTickets(encryptedId).subscribe({
+      next: (data) => {
+        //console.log('Direct response:', data);
+      },
+      error: (error) => {
+        console.error('Error fetching tickets:', error);
       }
     });
-
-
   }
+
 
   onLogOut() {
     this.accesoService.LogOut();
@@ -131,7 +155,23 @@ export class HomeComponent {
 
   isVisible = false;
 
-  showModal(): void {
+  showModal(action:string): void {
+
+    switch(action){
+      case 'active':
+        this.modalAction=action;
+        this.modalTitle="Tickets por sortear";
+      break;
+
+      case 'complete':
+        this.modalAction=action;
+        this.modalTitle="Tickets sorteados";
+      break;
+
+      default:
+        break;
+    }
+
     this.isVisible = true;
   }
 
@@ -143,6 +183,10 @@ export class HomeComponent {
   handleCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisible = false;
+  }
+
+  isWinningNumber(numero: number, numerosSorteos: { Numero: number }[] | undefined): boolean {
+    return numerosSorteos?.some(n => n.Numero === numero) ?? false;
   }
 
 }

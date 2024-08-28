@@ -9,4 +9,5 @@ export const appsettings = {
   edit_permission_text:"edit",
   delete_permission_text:"delete",
   add_permission_text:"add",
+  award_permission_text:"award"
 }
