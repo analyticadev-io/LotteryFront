@@ -11,6 +11,10 @@ Este proyecto es una aplicación de frontend desarrollada en Angular que gestion
 usuario: manager1
 password: manager1
 
+### Usuario
+usuario: user2
+password: user2.
+
 ## Características Principales
 
 ### Generación de Sorteos
@@ -43,6 +47,10 @@ This project is a frontend application developed in Angular that manages a lotte
 ### Manager
 usuario: manager1
 password: manager1
+
+### User
+usuario: user2
+password: user2.
 
 ## Main Features
 
