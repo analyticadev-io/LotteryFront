@@ -290,4 +290,10 @@ export class SorteosComponent implements OnInit {
       .tz('America/Guayaquil')
       .format('YYYY-MM-DD HH:mm:ss');
   }
+
+  onRefreshSorteos() {
+    this.getSorteos();
+    console.log('se emitio el eveto');
+  }
+
 }
