@@ -2,7 +2,8 @@
 ## [ES](#es)
 ## [EN](#en)
 
-# [LotteryFornt.io](#lotteryforntio)
+# ES
+## [LotteryFornt.io](#lotteryforntio)
 Este proyecto es una aplicación de frontend desarrollada en Angular que gestiona un sistema de sorteos de lotería. El sistema incluye un robusto control de acceso basado en roles (RBAC) implementado a través de interceptores y directivas personalizadas, garantizando la seguridad y la correcta autorización de los usuarios en diferentes secciones de la aplicación.
 
 ## [Características Principales](#caracteristicas-principales)
@@ -25,6 +26,35 @@ La aplicación utiliza interceptores para gestionar la autorización y asegurar 
 ### [Cifrado Sincrónico Bidireccional](#cifrado-sincronico-bidireccional)
 La seguridad de la comunicación entre el frontend y el backend está garantizada mediante cifrado sincrónico bidireccional. El frontend encripta las solicitudes antes de enviarlas al backend, que las desencripta, procesa y luego cifra las respuestas. El frontend descifra las respuestas para presentarlas al usuario, asegurando la protección de los datos en tránsito.
 
-## [Authors](#authors)
+## Authors
+
+- [@Devil-bit123](https://github.com/Devil-bit123)
+
+# EN
+
+## [LotteryFornt.io](#lotteryforntio)
+This project is a frontend application developed in Angular that manages a lottery draw system. The system includes a robust Role-Based Access Control (RBAC) implemented through interceptors and custom directives, ensuring the security and proper authorization of users in different sections of the application.
+
+## [Main Features](#main-features)
+
+### [Draw Generation](#draw-generation)
+Users with the appropriate permissions can create new draws, configuring details such as the date and rules of the draw.
+
+### [Ticket Sales](#ticket-sales)
+Users can buy tickets for available draws. Each ticket is linked to a specific user, allowing for detailed tracking of participations.
+
+### [Ticket Number Generation](#ticket-number-generation)
+Numbers on tickets can be generated automatically or entered manually by the user, providing flexibility and customization in ticket purchases.
+
+### [Winning Number Generation](#winning-number-generation)
+The winning number is randomly determined in each draw, ensuring a fair and transparent process.
+
+### [Access Control and Authorization](#access-control-and-authorization)
+The application uses interceptors to manage authorization and ensure that users can only access the functionalities for which they have permission. Additionally, custom directives facilitate role-based access management in the user interface.
+
+### [Bidirectional Synchronous Encryption](#bidirectional-synchronous-encryption)
+The security of communication between the frontend and backend is ensured through bidirectional synchronous encryption. The frontend encrypts requests before sending them to the backend, which decrypts, processes, and then encrypts the responses. The frontend decrypts the responses to present them to the user, ensuring data protection in transit.
+
+## Authors
 
 - [@Devil-bit123](https://github.com/Devil-bit123)
